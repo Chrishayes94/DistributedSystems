@@ -5,12 +5,12 @@ xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	<servlet>
-		<servlet-name>Social_Network</servlet-name>
-		<servlet-class>com.distributed.networksocial.Social_NetworkServlet</servlet-class>
+		<servlet-name>Login_Servlet</servlet-name>
+		<servlet-class>com.distributed.networksocial.Login_Servlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>Social_Network</servlet-name>
-		<url-pattern>/social_network</url-pattern>
+		<servlet-name>Login_Servlet</servlet-name>
+		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>

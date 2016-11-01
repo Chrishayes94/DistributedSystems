@@ -14,14 +14,12 @@
 
   <body>
     <h1>Hello App Engine!</h1>
-	
-    <table>
-      <tr>
-        <td colspan="2" style="font-weight:bold;">Available Servlets:</td>        
-      </tr>
-      <tr>
-        <td><a href="social_network">Social_Network</a></td>
-      </tr>
-    </table>
+    
+    <form action="login" method="post">
+    	Email/Username: <input type="text" name="usename"/>
+    	Password:		<input type="password" name="password"/>
+    	<input type="submit" value="Login"/>
+    	<input type="submit" value="Register"/>
+    </form>
   </body>
 </html>
