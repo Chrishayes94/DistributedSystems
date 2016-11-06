@@ -1,0 +1,108 @@
+div {
+	border-radius: 5px;
+	background-color: #f2f2f2;
+	padding: 20px;
+}
+
+/****** Global ******/
+/* Body */
+body {
+	background: #F5F4EF;
+	color: #000305;
+	font-size: 87.5%;
+	font-family: 'Trebuchet MS', Trebuchet, 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+	line-height: 1.429;
+	margin: 0;
+	padding: 0;
+	text-align: left;
+}
+
+/* Headings */
+h2 {font-size: 1.571em} /* 22px */
+h3 {font-size: 1.429em} /* 20px */
+h4 {font-size: 1.286em} /* 18px */
+h5 {font-size: 1.143em} /* 16px */
+h6 {font-size: 1.000em} /* 14px */
+
+h2, h3, h4, h5, h6 {
+	font-weight: 400;
+	line-height: 1.1;
+	margin-bottom: 0.8em;
+}
+
+/* Anchors */
+a {outline: 0;}
+a img {border: 0px; text-decoration: none;}
+
+a:link, a:visited {
+	color: #C74350;
+	padding: 0 1px;
+	text-decoration: underline;
+}
+
+a:hover, a:active {
+	background-color: #C74350;
+	color: #fff;
+	text-decoration: none;
+	text-shadow: 1px 1px 1px #333;
+}
+
+/* Paragraphs */
+p {margin-bottom: 1.143em;}
+* p:last-child {margin-bottom: 0;}
+
+strong, b {font-weight: bold;}
+em, i {font-style: italic;}
+
+::-moz-selection {background: #F6cF74; color: #fff;}
+::selection {background: #F6CF74;}
+
+/* Lists */
+ul {
+	list-style: outside disc;
+	margin: 1em 0 1.5em 1.5em;
+}
+
+ol {
+	list-style: outside decimal;
+	margin: 1em 0 1.5em 1.5em;
+}
+
+dl {margin: 0 0 1.5em 0;}
+dt {font-weight: bold;}
+dd {margin-left: 1.5em;}
+
+/* Quotes */
+blockquote {font-style: italic;}
+cite {}
+
+q {}
+
+/* Forms */
+form {margin: .5em auto 1.5em auto; display: inline-block;}
+
+/** Card for updates style **/
+.card {
+	display: inline-block;
+	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+	transition: 0.3s;
+}
+
+.card:hover {
+	box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.container {
+	padding: 2px 16px;
+}
+
+/** Form CSS styles **/
+input[type=text] {
+	border: 2px solid grey;
+	border-radius: 4px;
+}
+
+input[type=password] {
+	border: 2px solid grey;
+	border-radius: 4px;
+}
