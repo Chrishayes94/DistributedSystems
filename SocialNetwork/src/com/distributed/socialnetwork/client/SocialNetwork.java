@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -38,8 +39,8 @@ public class SocialNetwork implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	
-	VerticalPanel panelV = new VerticalPanel();
-	HorizontalPanel panelH = new HorizontalPanel();
+	ScrollPanel panelMain = new ScrollPanel();
+	HorizontalPanel panelTop = new HorizontalPanel();
 	
 	public void onModuleLoad() {
 	      // Create a Image widget 
@@ -49,9 +50,9 @@ public class SocialNetwork implements EntryPoint {
 	      //image.setUrl("http://www.tutorialspoint.com/images/gwt-mini.png");
 
 	      // Add image to the root panel.
-	      panelV.add(image);
+	      panelMain.add(image);
 
-	      RootPanel.get("gwtContainer").add(panelV);
-	      RootPanel.get("gwtContainer").add(panelH);
+	      RootPanel.get("gwtContainer").add(panelMain);
+	      RootPanel.get("gwtContainer").add(panelTop);
 	}
 }
