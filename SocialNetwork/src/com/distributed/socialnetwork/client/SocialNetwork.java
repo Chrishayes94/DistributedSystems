@@ -33,7 +33,7 @@ public class SocialNetwork implements EntryPoint {
 	/**
 	 * Create a remote service proxy to talk to the server-side Greeting service.
 	 */
-	private final GreetingServiceAsync greetingService = GWT.create(ConnectionService.class);
+	private final ConnectionServiceAsync greetingService = GWT.create(ConnectionService.class);
 
 	/**
 	 * This is the entry point method.
