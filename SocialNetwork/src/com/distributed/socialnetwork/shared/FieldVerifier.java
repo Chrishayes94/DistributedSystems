@@ -1,5 +1,7 @@
 package com.distributed.socialnetwork.shared;
 
+import com.sun.xml.internal.messaging.saaj.util.Base64;
+
 /**
  * <p>
  * FieldVerifier validates that the name the user enters is valid.
@@ -38,5 +40,18 @@ public class FieldVerifier {
 			return false;
 		}
 		return name.length() > 3;
+	}
+	
+	public static boolean isNameAndPasswordCompatible(String name, String password) 
+	{
+		String decodedPass = Base64.base64Decode(password);
+		
+		// TODO:: Connect to database and validate the provided name and password.
+		if (isValidName(name))
+		{
+			// Empty if statement for mysql query.
+			return true;
+		}
+		return false;
 	}
 }

@@ -1,6 +1,10 @@
 package com.distributed.socialnetwork.server;
 
+import java.io.IOException;
+
+import com.distributed.socialnetwork.client.ConnectionService;
 import com.distributed.socialnetwork.client.GreetingService;
+import com.distributed.socialnetwork.shared.Entity;
 import com.distributed.socialnetwork.shared.FieldVerifier;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -8,8 +12,31 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
  * The server-side implementation of the RPC service.
  */
 @SuppressWarnings("serial")
-public class GreetingServiceImpl extends RemoteServiceServlet implements GreetingService {
-
+public class ConnectionServiceImpl extends RemoteServiceServlet implements GreetingService, ConnectionService {
+	
+	@Override
+	public String requestLogin(String name, String password) throws IllegalArgumentException, IOException {
+		// TODO Auto-generated method stub
+		
+		if ((name.isEmpty() || name == null) || (password.isEmpty() || password == null)) {
+			throw new IOException("No username or password was provided");
+		}
+		
+		if (!FieldVerifier.isNameAndPasswordCompatible(name, password)) {
+			throw new IllegalArgumentException("The provided username and password are incorrect");
+		}
+		
+		return null;
+	}
+	
+	@Override
+	public String requestRegistration(Entity user) throws IllegalArgumentException {
+		
+		
+		
+		return null;
+	}
+	
 	public String greetServer(String input) throws IllegalArgumentException {
 		// Verify that the input is valid. 
 		if (!FieldVerifier.isValidName(input)) {
