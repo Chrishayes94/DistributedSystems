@@ -10,10 +10,18 @@
     <servlet-name>connectionServlet</servlet-name>
     <servlet-class>com.distributed.socialnetwork.server.ConnectionServiceImpl</servlet-class>
   </servlet>
+  <servlet>
+      <servlet-name>webUIServiceImpl</servlet-name>
+      <servlet-class>com.distributed.socialnetwork.server.WebUIServiceImpl</servlet-class>
+  </servlet>
   
   <servlet-mapping>
     <servlet-name>connectionServlet</servlet-name>
     <url-pattern>/socialnetwork/connection</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>webUIServiceImpl</servlet-name>
+    <url-pattern>/socialnetwork/webUI</url-pattern>
   </servlet-mapping>
   
   <!-- Default page to serve -->

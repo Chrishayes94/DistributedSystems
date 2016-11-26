@@ -2,8 +2,7 @@ package com.distributed.socialnetwork.server;
 
 import java.io.IOException;
 
-import com.distributed.socialnetwork.client.ConnectionService;
-import com.distributed.socialnetwork.shared.Entity;
+import com.distributed.socialnetwork.client.services.ConnectionService;
 import com.distributed.socialnetwork.shared.FieldVerifier;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -12,30 +11,14 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
  */
 @SuppressWarnings("serial")
 public class ConnectionServiceImpl extends RemoteServiceServlet implements ConnectionService {
-	
-	@Override
-	public String requestLogin(String name, String password) throws IllegalArgumentException, IOException {
-		// TODO Auto-generated method stub
-		
-		if ((name.isEmpty() || name == null) || (password.isEmpty() || password == null)) {
-			throw new IOException("No username or password was provided");
-		}
-		
-		if (!FieldVerifier.isNameAndPasswordCompatible(name, password)) {
-			throw new IllegalArgumentException("The provided username and password are incorrect");
-		}
-		
-		return null;
-	}
-	
-	@Override
-	public String requestRegistration(Entity user) throws IllegalArgumentException {
-		
-		
-		
-		return null;
-	}
 
+	@Override
+	public String login(String loginInfo) {
+		/** Connection to database here **/
+		
+		return "";
+	}
+	
 	/**
 	 * Escape an html string. Escaping data received from the client helps to
 	 * prevent cross-site script vulnerabilities.

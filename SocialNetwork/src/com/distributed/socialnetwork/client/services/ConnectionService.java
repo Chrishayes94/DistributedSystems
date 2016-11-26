@@ -1,8 +1,7 @@
-package com.distributed.socialnetwork.client;
+package com.distributed.socialnetwork.client.services;
 
 import java.io.IOException;
 
-import com.distributed.socialnetwork.shared.Entity;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -11,6 +10,5 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
  */
 @RemoteServiceRelativePath("connection")
 public interface ConnectionService extends RemoteService {
-	String requestLogin(String name, String password) throws IllegalArgumentException, IOException;
-	String requestRegistration(Entity user) throws IllegalArgumentException;
+	String login(String loginInfo);
 }
