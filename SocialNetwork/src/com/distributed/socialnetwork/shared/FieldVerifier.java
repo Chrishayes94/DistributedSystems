@@ -41,17 +41,4 @@ public class FieldVerifier {
 		}
 		return name.length() > 3;
 	}
-	
-	public static boolean isNameAndPasswordCompatible(String name, String password) 
-	{
-		String decodedPass = Base64.base64Decode(password);
-		
-		// TODO:: Connect to database and validate the provided name and password.
-		if (isValidName(name))
-		{
-			// Empty if statement for mysql query.
-			return true;
-		}
-		return false;
-	}
 }

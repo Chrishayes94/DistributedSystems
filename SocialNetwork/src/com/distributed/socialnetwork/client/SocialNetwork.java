@@ -7,14 +7,18 @@ import com.distributed.socialnetwork.client.services.WebUIService;
 import com.distributed.socialnetwork.client.services.WebUIServiceAsync;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.TextBox;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -70,6 +74,8 @@ public class SocialNetwork implements EntryPoint {
 		RootPanel.get("content").add(content);
 		RootPanel.get("header").add(header);
 		RootPanel.get("footer").add(footer);
+		
+		prepareLoginButton(loginView.getLoginButton(), loginView.getUsernameBox(), loginView.getPasswordBox());
 	}
 	
 	public void attemptToCreateUI() {
@@ -85,7 +91,7 @@ public class SocialNetwork implements EntryPoint {
 				if (result) {
 					RootPanel root = RootPanel.get("postbox");
 					Button submit = new Button("Post");
-					
+						
 					root.add(new HTML("<form action=\"submit\" method=\"post\">"));
 					root.add(new HTML("		<div><textarea name=\"content\" rows=\"3\" cols=\"60\"></textarea></div>"));
 					root.add(submit);
@@ -96,18 +102,31 @@ public class SocialNetwork implements EntryPoint {
 		});
 	}
 	
-	public void attemptUserConnection() {
-		connectionService.login(GWT.getHostPageBaseURL(), new AsyncCallback<String>() {
-
+	private void prepareLoginButton(final Button button, final TextBox box, final PasswordTextBox password) {
+		button.addClickHandler(new ClickHandler() {
 			@Override
-			public void onFailure(Throwable caught) {
-				// Was not able to login or create account with the provided information.
-			}
+			public void onClick(ClickEvent event) {
+				connectionService.login(box.getText() + ":" + password.getText(), new AsyncCallback<Boolean>() {
 
-			@Override
-			public void onSuccess(String result) {
-				// TODO Auto-generated method stub
-				
+					@Override
+					public void onFailure(Throwable caught) {
+						// Error occurred while logging in
+					}
+
+					@Override
+					public void onSuccess(Boolean result) {
+						if (result) {
+							// The details provided were correct.
+							
+						} else if (!result) {
+							// Flag an error message detailing there is a problem with either username or password.
+						}
+						else {
+							
+						}
+					}
+					
+				});
 			}
 		});
 	}

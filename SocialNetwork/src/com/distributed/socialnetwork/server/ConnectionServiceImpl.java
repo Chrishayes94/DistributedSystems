@@ -1,8 +1,14 @@
 package com.distributed.socialnetwork.server;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import org.apache.xerces.impl.dv.util.Base64;
 
 import com.distributed.socialnetwork.client.services.ConnectionService;
+import com.distributed.socialnetwork.server.database.DatabaseManager;
+import com.distributed.socialnetwork.shared.ClientInfo;
 import com.distributed.socialnetwork.shared.FieldVerifier;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -13,10 +19,17 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class ConnectionServiceImpl extends RemoteServiceServlet implements ConnectionService {
 
 	@Override
-	public String login(String loginInfo) {
-		/** Connection to database here **/
+	public Boolean login(String loginInfo) {
+		// Create a new ClientInfo object, this will be used to track current loggedin users.
+		ClientInfo client = ClientInfo.createClient(loginInfo.split(":")[0], loginInfo.split(":")[1]);
+		Connection databaseConnection = DatabaseManager.getConnection();
 		
-		return "";
+		String password = new String(Base64.decode(DatabaseManager.getPassword(databaseConnection, client.getEmail())));
+		if (password.equals(client.getPassword())) {
+			return true;
+		}
+		
+		return false;
 	}
 	
 	/**
