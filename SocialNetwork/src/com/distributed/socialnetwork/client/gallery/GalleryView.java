@@ -7,6 +7,11 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+/**
+ * Creating dockpanel layout for main gallery view page after login
+ * @author Alex
+ */
+
 public class GalleryView extends Composite {
 
 	private VerticalPanel vPanel = new VerticalPanel();
