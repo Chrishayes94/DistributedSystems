@@ -1,4 +1,4 @@
-package com.distributed.socialnetwork.client;
+package com.distributed.socialnetwork.client.gallery;
 
 import com.google.gwt.event.shared.EventHandler;
 

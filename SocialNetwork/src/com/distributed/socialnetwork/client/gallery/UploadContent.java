@@ -17,28 +17,26 @@ import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.distributed.socialnetwork.client.GalleryUpdatedEvent;
-import com.distributed.socialnetwork.client.GalleryUpdatedEventHandler;
-import com.distributed.socialnetwork.client.gallery.ImageOverlay;
-import com.distributed.socialnetwork.client.services.UserImageService;
-import com.distributed.socialnetwork.client.services.UserImageServiceAsync;
-import com.distributed.socialnetwork.shared.UploadedImage;
+import com.distributed.socialnetwork.client.gallery.ContentOverlay;
+import com.distributed.socialnetwork.client.services.UserContentService;
+import com.distributed.socialnetwork.client.services.UserContentServiceAsync;
+import com.distributed.socialnetwork.shared.UploadedContent;
 
 /**
  * Widget creation for uploading images. Implements UI binding (GWT)
  * @author Alex
  */
 
-public class UploadPhoto extends Composite implements HasHandlers {
+public class UploadContent extends Composite implements HasHandlers {
 
 	private static UploadPhotoUiBinder uiBinder = GWT
 			.create(UploadPhotoUiBinder.class);
 
-	UserImageServiceAsync userImageService = GWT.create(UserImageService.class);
+	UserContentServiceAsync userImageService = GWT.create(UserContentService.class);
 
 	private HandlerManager handlerManager;
 
-	interface UploadPhotoUiBinder extends UiBinder<Widget, UploadPhoto> {
+	interface UploadPhotoUiBinder extends UiBinder<Widget, UploadContent> {
 	}
 
 	@UiField
@@ -50,7 +48,7 @@ public class UploadPhoto extends Composite implements HasHandlers {
 	@UiField
 	FileUpload uploadField;
 
-	public UploadPhoto() {
+	public UploadContent() {
 		handlerManager = new HandlerManager(this);
 
 		initWidget(uiBinder.createAndBindUi(this));
@@ -71,7 +69,7 @@ public class UploadPhoto extends Composite implements HasHandlers {
 
 						String key = event.getResults();
 
-						userImageService.get(key,new AsyncCallback<UploadedImage>() {
+						userImageService.get(key,new AsyncCallback<UploadedContent>() {
 
 									@Override
 									public void onFailure(Throwable caught) {
@@ -80,9 +78,9 @@ public class UploadPhoto extends Composite implements HasHandlers {
 									}
 
 									@Override
-									public void onSuccess(UploadedImage result) {
+									public void onSuccess(UploadedContent result) {
 
-										ImageOverlay overlay = new ImageOverlay(result);
+										ContentOverlay overlay = new ContentOverlay(result);
 										GalleryUpdatedEvent event = new GalleryUpdatedEvent();
 										fireEvent(event);
 

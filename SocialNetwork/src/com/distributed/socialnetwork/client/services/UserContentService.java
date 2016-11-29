@@ -4,14 +4,14 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import com.distributed.socialnetwork.shared.UploadedImage;
+import com.distributed.socialnetwork.shared.UploadedContent;
 
 @RemoteServiceRelativePath("images")
-public interface UserImageService extends RemoteService  {
+public interface UserContentService extends RemoteService  {
 	
 	public String getBlobstoreUploadUrl();
-	public UploadedImage get(String key);
-	public List<UploadedImage> getRecentlyUploaded();
+	public UploadedContent get(String key);
+	public List<UploadedContent> getRecentlyUploaded();
 	public void deleteImage(String key);
 
 }

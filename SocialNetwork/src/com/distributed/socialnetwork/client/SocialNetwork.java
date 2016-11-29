@@ -1,7 +1,7 @@
 package com.distributed.socialnetwork.client;
 
-import com.distributed.socialnetwork.client.gallery.PhotoGallery;
-import com.distributed.socialnetwork.client.gallery.UploadPhoto;
+import com.distributed.socialnetwork.client.gallery.ContentGallery;
+import com.distributed.socialnetwork.client.gallery.UploadContent;
 import com.distributed.socialnetwork.client.loginView.LoginView;
 import com.distributed.socialnetwork.client.services.ConnectionService;
 import com.distributed.socialnetwork.client.services.ConnectionServiceAsync;
@@ -43,8 +43,8 @@ public class SocialNetwork implements EntryPoint {
 	
 	private LoginView loginView = new LoginView();
 	
-	private PhotoGallery galleryWidget;
-	private UploadPhoto uploadWidget;
+	private ContentGallery galleryWidget;
+	private UploadContent uploadWidget;
 	
 	/**
 	 * This is the entry point method.
@@ -66,7 +66,7 @@ public class SocialNetwork implements EntryPoint {
 		
 		prepareLoginButton(loginView.getLoginButton(), loginView.getUsernameBox(), loginView.getPasswordBox());
 		
-		galleryWidget = new PhotoGallery(this);
+		galleryWidget = new ContentGallery(this);
 	}
 	
 	public void attemptToCreateUI() {

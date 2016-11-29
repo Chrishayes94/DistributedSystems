@@ -18,11 +18,9 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.distributed.socialnetwork.client.GalleryUpdatedEvent;
-import com.distributed.socialnetwork.client.GalleryUpdatedEventHandler;
-import com.distributed.socialnetwork.client.services.UserImageService;
-import com.distributed.socialnetwork.client.services.UserImageServiceAsync;
-import com.distributed.socialnetwork.shared.UploadedImage;
+import com.distributed.socialnetwork.client.services.UserContentService;
+import com.distributed.socialnetwork.client.services.UserContentServiceAsync;
+import com.distributed.socialnetwork.shared.UploadedContent;
 
 /**
  * 
@@ -31,16 +29,15 @@ import com.distributed.socialnetwork.shared.UploadedImage;
  * functions which are considered "Menu" type functions for a given image.
  * 
  */
-public class ImageOverlay extends Composite implements HasHandlers {
+public class ContentOverlay extends Composite implements HasHandlers {
 
-	private static ImageOverlayUiBinder uiBinder = GWT
-			.create(ImageOverlayUiBinder.class);
+	private static ContentOverlayUiBinder uiBinder = GWT.create(ContentOverlayUiBinder.class);
 
-	UserImageServiceAsync imageService = GWT.create(UserImageService.class);
+	UserContentServiceAsync imageService = GWT.create(UserContentService.class);
 
 	private HandlerManager handlerManager;
 
-	interface ImageOverlayUiBinder extends UiBinder<Widget, ImageOverlay> {
+	interface ContentOverlayUiBinder extends UiBinder<Widget, ContentOverlay> {
 	}
 
 	@UiField
@@ -55,28 +52,28 @@ public class ImageOverlay extends Composite implements HasHandlers {
 	@UiField
 	VerticalPanel tagPanel;
 
-	protected UploadedImage uploadedImage;
+	protected UploadedContent uploadedContent;
 
-	public ImageOverlay(UploadedImage uploadedImage) {
+	public ContentOverlay(UploadedContent uploadedContent) {
 		handlerManager = new HandlerManager(this);
 
-		this.uploadedImage = uploadedImage;
+		this.uploadedContent = uploadedContent;
 
 		initWidget(uiBinder.createAndBindUi(this));
 
-		image.setUrl(uploadedImage.getServingUrl());
-		timestamp.setText("Created at:" + uploadedImage.getCreatedAt());
+		image.setUrl(uploadedContent.getServingUrl());
+		timestamp.setText("Created at:" + uploadedContent.getCreatedAt());
 
-		uploadedImage.getOwnerId();
-		deleteButton.setText("Delete image");
+		uploadedContent.getOwnerId();
+		deleteButton.setText("Delete content");
 		deleteButton.setVisible(true);
 	}
 
 	@UiHandler("image")
-	void onClickImage(MouseDownEvent e) {
-		Element imageElement = e.getRelativeElement();
-		int x = e.getRelativeX(imageElement);
-		int y = e.getRelativeY(imageElement);
+	void onClickContent(MouseDownEvent e) {
+		Element contentElement = e.getRelativeElement();
+		int x = e.getRelativeX(contentElement);
+		int y = e.getRelativeY(contentElement);
 	}
 
 	/**
@@ -87,8 +84,8 @@ public class ImageOverlay extends Composite implements HasHandlers {
 	 */
 	@UiHandler("deleteButton")
 	void onClick(ClickEvent e) {
-		final ImageOverlay overlay = this;
-		imageService.deleteImage(uploadedImage.getKey(),
+		final ContentOverlay overlay = this;
+		imageService.deleteImage(uploadedContent.getKey(),
 				new AsyncCallback<Void>() {
 
 					@Override

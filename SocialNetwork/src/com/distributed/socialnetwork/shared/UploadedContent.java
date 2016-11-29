@@ -1,22 +1,22 @@
-package com.distributed.socialnetwork.client;
+package com.distributed.socialnetwork.shared;
 
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Uploaded images 
+ * Image class for uploaded images
  * @author Alex
  */
 
 @SuppressWarnings("serial")
-public class UploadedImage implements Serializable {
+public class UploadedContent implements Serializable {
 
-	public static final String IMAGE = "image";
+	public static final String SERVING_URL = "servingUrl";
 	public static final String CREATED_AT = "createdAt";
 	public static final String OWNER_ID = "ownerId";
 
 	String key;
-	String image;
+	String servingUrl;
 	Date createdAt;
 	String ownerId; // Refers to the User that uploaded this
 
@@ -28,12 +28,12 @@ public class UploadedImage implements Serializable {
 		this.key = key;
 	}
 
-	public String getImage() {
-		return image;
+	public String getServingUrl() {
+		return servingUrl;
 	}
 
-	public void setImage(String servingUrl) {
-		this.image = servingUrl;
+	public void setServingUrl(String servingUrl) {
+		this.servingUrl = servingUrl;
 	}
 
 	public Date getCreatedAt() {
@@ -51,4 +51,5 @@ public class UploadedImage implements Serializable {
 	public void setOwnerId(String ownerId) {
 		this.ownerId = ownerId;
 	}
+
 }

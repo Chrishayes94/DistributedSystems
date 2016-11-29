@@ -17,24 +17,22 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 import com.distributed.socialnetwork.client.SocialNetwork;
-import com.distributed.socialnetwork.client.GalleryUpdatedEvent;
-import com.distributed.socialnetwork.client.GalleryUpdatedEventHandler;
-import com.distributed.socialnetwork.client.services.UserImageService;
-import com.distributed.socialnetwork.client.services.UserImageServiceAsync;
-import com.distributed.socialnetwork.shared.UploadedImage;
+import com.distributed.socialnetwork.client.services.UserContentService;
+import com.distributed.socialnetwork.client.services.UserContentServiceAsync;
+import com.distributed.socialnetwork.shared.UploadedContent;
 
 /**
  * Photogallery widget creation to display uploaded images
  * @author Alex
  */
 
-public class PhotoGallery extends Composite implements GalleryUpdatedEventHandler {
+public class ContentGallery extends Composite implements GalleryUpdatedEventHandler {
 
-	private static PhotoGalleryUiBinder uiBinder = GWT.create(PhotoGalleryUiBinder.class);
+	private static ContentGalleryUiBinder uiBinder = GWT.create(ContentGalleryUiBinder.class);
 
-	UserImageServiceAsync userImageService = GWT.create(UserImageService.class);
+	UserContentServiceAsync userImageService = GWT.create(UserContentService.class);
 
-	interface PhotoGalleryUiBinder extends UiBinder<Widget, PhotoGallery> {
+	interface ContentGalleryUiBinder extends UiBinder<Widget, ContentGallery> {
 	}
 
 	private static final int GALLERY_WIDTH = 5;
@@ -44,7 +42,7 @@ public class PhotoGallery extends Composite implements GalleryUpdatedEventHandle
 	
 	SocialNetwork parent;
 	
-	public PhotoGallery(SocialNetwork parent) {
+	public ContentGallery(SocialNetwork parent) {
 		this.parent = parent;
 		
 		initWidget(uiBinder.createAndBindUi(this));
@@ -52,16 +50,16 @@ public class PhotoGallery extends Composite implements GalleryUpdatedEventHandle
 	}
 
 	public void refreshGallery() {
-		userImageService.getRecentlyUploaded(new AsyncCallback<List<UploadedImage>>() {
+		userImageService.getRecentlyUploaded(new AsyncCallback<List<UploadedContent>>() {
 
 					@Override
-					public void onSuccess(List<UploadedImage> images) {
+					public void onSuccess(List<UploadedContent> images) {
 						
 						int currentColumn = 0;
 						int currentRow = 0;
-						for (final UploadedImage image : images) {
+						for (final UploadedContent image : images) {
 
-							Image imageWidget = createImageWidget(image);
+							Image imageWidget = createContentWidget(image);
 
 							galleryTable.setWidget(currentRow, currentColumn, imageWidget);
 
@@ -82,7 +80,7 @@ public class PhotoGallery extends Composite implements GalleryUpdatedEventHandle
 				});
 	}
 
-	private Image createImageWidget(final UploadedImage image) {
+	private Image createContentWidget(final UploadedContent image) {
 		final Image imageWidget = new Image();
 		imageWidget.setUrl(image.getServingUrl() + "=s200");
 		final DecoratedPopupPanel simplePopup = new DecoratedPopupPanel(true);
