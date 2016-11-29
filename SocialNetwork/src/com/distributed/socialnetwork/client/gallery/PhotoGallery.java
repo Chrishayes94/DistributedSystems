@@ -23,6 +23,11 @@ import com.distributed.socialnetwork.client.services.UserImageService;
 import com.distributed.socialnetwork.client.services.UserImageServiceAsync;
 import com.distributed.socialnetwork.shared.UploadedImage;
 
+/**
+ * Photogallery widget creation to display uploaded images
+ * @author Alex
+ */
+
 public class PhotoGallery extends Composite implements GalleryUpdatedEventHandler {
 
 	private static PhotoGalleryUiBinder uiBinder = GWT.create(PhotoGalleryUiBinder.class);

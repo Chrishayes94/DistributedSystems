@@ -24,6 +24,11 @@ import com.distributed.socialnetwork.client.services.UserImageService;
 import com.distributed.socialnetwork.client.services.UserImageServiceAsync;
 import com.distributed.socialnetwork.shared.UploadedImage;
 
+/**
+ * Widget creation for uploading images. Implements UI binding (GWT)
+ * @author Alex
+ */
+
 public class UploadPhoto extends Composite implements HasHandlers {
 
 	private static UploadPhotoUiBinder uiBinder = GWT
@@ -53,7 +58,6 @@ public class UploadPhoto extends Composite implements HasHandlers {
 		uploadButton.setText("Upload");
 		uploadButton.setText("Loading...");
 		uploadButton.setEnabled(false);
-
 		uploadField.setName("image");
 
 		startNewUploadSession();
@@ -107,10 +111,8 @@ public class UploadPhoto extends Composite implements HasHandlers {
 				uploadForm.setAction(result);
 				uploadForm.setEncoding(FormPanel.ENCODING_MULTIPART);
 				uploadForm.setMethod(FormPanel.METHOD_POST);
-
 				uploadButton.setText("Upload");
 				uploadButton.setEnabled(true);
-
 			}
 
 			@Override

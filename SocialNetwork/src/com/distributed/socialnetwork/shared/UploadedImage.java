@@ -3,6 +3,11 @@ package com.distributed.socialnetwork.shared;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * Image class for uploaded images
+ * @author Alex
+ */
+
 @SuppressWarnings("serial")
 public class UploadedImage implements Serializable {
 

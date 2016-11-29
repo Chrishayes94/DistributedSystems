@@ -5,6 +5,10 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.distributed.socialnetwork.shared.UploadedImage;
 
+/**
+ * @author Alex
+ */
+
 public interface UserImageServiceAsync {
 
 	public void getBlobstoreUploadUrl(AsyncCallback<String> callback);

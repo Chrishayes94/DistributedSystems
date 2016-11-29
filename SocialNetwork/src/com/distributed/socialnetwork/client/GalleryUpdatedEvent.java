@@ -3,7 +3,8 @@ package com.distributed.socialnetwork.client;
 import com.google.gwt.event.shared.GwtEvent;
 
 /**
- *
+ * Handler for updates (ie new uploads) to the gallery
+ * @author Alex
  */
 public class GalleryUpdatedEvent extends GwtEvent<GalleryUpdatedEventHandler> {
 
