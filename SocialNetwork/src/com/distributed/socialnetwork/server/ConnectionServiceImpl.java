@@ -21,6 +21,7 @@ public class ConnectionServiceImpl extends RemoteServiceServlet implements Conne
 	@Override
 	public Boolean login(String loginInfo) {
 		// Create a new ClientInfo object, this will be used to track current loggedin users.
+		if (loginInfo.length() <= 1) return false;
 		ClientInfo client = ClientInfo.createClient(loginInfo.split(":")[0], loginInfo.split(":")[1]);
 		Connection databaseConnection = DatabaseManager.getConnection();
 		

@@ -17,16 +17,22 @@ public class DatabaseManager {
 	public static Connection getConnection() {
 		Connection conn = null;
 		try {
-			Class.forName(JDBC_DRIVER);
+			Class.forName(JDBC_DRIVER).newInstance();
 				
 			conn = DriverManager.getConnection(DB_URL, username, password);
 			if (conn.isClosed()) return null;
 			return conn;
 		}
 		catch (SQLException e) {
-			// SQL Exception handling.
+			System.out.print("SQLException: " + e.getMessage());
+			System.out.print("SQLState: " + e.getSQLState());
+			System.out.print("VendorError: " + e.getErrorCode());
 		} catch (ClassNotFoundException e) {
-			// Unabale to locate Class.
+			System.out.print("ClassNotFoundException: " + e.getMessage());
+		} catch (InstantiationException e) {
+			System.out.print("InstantiationException: " + e.getMessage());
+		} catch (IllegalAccessException e) {
+			System.out.print("IllegalAccessException: " + e.getMessage());
 		}
 		return null;
 	}
