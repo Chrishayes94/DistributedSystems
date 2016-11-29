@@ -40,6 +40,7 @@ public class SocialNetwork implements EntryPoint {
 	private final WebUIServiceAsync webUIService = (WebUIServiceAsync) GWT.create(WebUIService.class);
 	
 	private VerticalPanel vPanel = new VerticalPanel();
+	
 	private FlowPanel header = new FlowPanel();
 	private FlowPanel content = new FlowPanel();
 	private FlowPanel footer = new FlowPanel();
@@ -55,10 +56,26 @@ public class SocialNetwork implements EntryPoint {
 	 */
 	public void onModuleLoad() {
 	      
+		/*header.clear();
+		header.add(loginView.getLoginHeader().getHpanel());
+		
+		content.clear();
+		content.add(loginView.getMainPanel());
+		
+		footer.clear();
+		footer.add(loginView.getLoginFooter().getHpanel());
+		
+		RootPanel.get("content").add(content);
+		RootPanel.get("header").add(header);
+		RootPanel.get("footer").add(footer);
+		
+		prepareLoginButton(loginView.getLoginButton(), loginView.getUsernameBox(), loginView.getPasswordBox());
+		
+		galleryWidget = new ContentGallery(this);*/
+		
 		vPanel.add(galleryView.getMainPanel());
 		
 		RootPanel.get().add(vPanel);
-		//prepareLoginButton(loginView.getLoginButton(), loginView.getUsernameBox(), loginView.getPasswordBox());
 	}
 	
 	public void attemptToCreateUI() {

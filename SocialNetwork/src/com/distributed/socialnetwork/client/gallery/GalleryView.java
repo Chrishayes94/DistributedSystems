@@ -1,5 +1,6 @@
 package com.distributed.socialnetwork.client.gallery;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -11,6 +12,9 @@ public class GalleryView extends Composite {
 	VerticalPanel vPanel = new VerticalPanel();
 	
 	public GalleryView() {
+		int windowHeight = Window.getClientHeight();
+		int windowWidth = Window.getClientWidth();
+		
 	  DockPanel dockPanel = new DockPanel();
 	  dockPanel.setStyleName("dockpanel");
 	  dockPanel.setSpacing(4);
@@ -35,7 +39,7 @@ public class GalleryView extends Composite {
 	  +" Otherwise, you might have to make it really, really"
 	  +" small in order to see the nifty scroll bars!");
 	  ScrollPanel scroller = new ScrollPanel(contents);
-	  scroller.setSize("800px", "500px");
+	  scroller.setPixelSize(windowHeight, windowWidth);
 	  dockPanel.add(scroller, DockPanel.CENTER);
 	
 	  // Add the widgets to the root panel.
