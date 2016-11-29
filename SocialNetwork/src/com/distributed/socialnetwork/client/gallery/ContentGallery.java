@@ -30,7 +30,7 @@ public class ContentGallery extends Composite implements GalleryUpdatedEventHand
 
 	private static ContentGalleryUiBinder uiBinder = GWT.create(ContentGalleryUiBinder.class);
 
-	UserContentServiceAsync userImageService = GWT.create(UserContentService.class);
+	UserContentServiceAsync userContentService = GWT.create(UserContentService.class);
 
 	interface ContentGalleryUiBinder extends UiBinder<Widget, ContentGallery> {
 	}
@@ -50,16 +50,16 @@ public class ContentGallery extends Composite implements GalleryUpdatedEventHand
 	}
 
 	public void refreshGallery() {
-		userImageService.getRecentlyUploaded(new AsyncCallback<List<UploadedContent>>() {
+		userContentService.getRecentlyUploaded(new AsyncCallback<List<UploadedContent>>() {
 
 					@Override
-					public void onSuccess(List<UploadedContent> images) {
+					public void onSuccess(List<UploadedContent> contents) {
 						
 						int currentColumn = 0;
 						int currentRow = 0;
-						for (final UploadedContent image : images) {
+						for (final UploadedContent content : contents) {
 
-							Image imageWidget = createContentWidget(image);
+							Image imageWidget = createContentWidget(content);
 
 							galleryTable.setWidget(currentRow, currentColumn, imageWidget);
 

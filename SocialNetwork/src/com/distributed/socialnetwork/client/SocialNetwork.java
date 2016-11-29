@@ -1,6 +1,7 @@
 package com.distributed.socialnetwork.client;
 
 import com.distributed.socialnetwork.client.gallery.ContentGallery;
+import com.distributed.socialnetwork.client.gallery.GalleryView;
 import com.distributed.socialnetwork.client.gallery.UploadContent;
 import com.distributed.socialnetwork.client.loginView.LoginView;
 import com.distributed.socialnetwork.client.services.ConnectionService;
@@ -19,6 +20,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -37,11 +39,13 @@ public class SocialNetwork implements EntryPoint {
 	private final ConnectionServiceAsync connectionService = GWT.create(ConnectionService.class);
 	private final WebUIServiceAsync webUIService = (WebUIServiceAsync) GWT.create(WebUIService.class);
 	
+	private VerticalPanel vPanel = new VerticalPanel();
 	private FlowPanel header = new FlowPanel();
 	private FlowPanel content = new FlowPanel();
 	private FlowPanel footer = new FlowPanel();
 	
 	private LoginView loginView = new LoginView();
+	private GalleryView galleryView = new GalleryView();
 	
 	private ContentGallery galleryWidget;
 	private UploadContent uploadWidget;
@@ -51,22 +55,10 @@ public class SocialNetwork implements EntryPoint {
 	 */
 	public void onModuleLoad() {
 	      
-		header.clear();
-		header.add(loginView.getLoginHeader().getHpanel());
+		vPanel.add(galleryView.getMainPanel());
 		
-		content.clear();
-		content.add(loginView.getMainPanel());
-		
-		footer.clear();
-		footer.add(loginView.getLoginFooter().getHpanel());
-		
-		RootPanel.get("content").add(content);
-		RootPanel.get("header").add(header);
-		RootPanel.get("footer").add(footer);
-		
-		prepareLoginButton(loginView.getLoginButton(), loginView.getUsernameBox(), loginView.getPasswordBox());
-		
-		galleryWidget = new ContentGallery(this);
+		RootPanel.get().add(vPanel);
+		//prepareLoginButton(loginView.getLoginButton(), loginView.getUsernameBox(), loginView.getPasswordBox());
 	}
 	
 	public void attemptToCreateUI() {

@@ -18,6 +18,4 @@ public interface UserContentServiceAsync {
 	void getRecentlyUploaded(AsyncCallback<List<UploadedContent>> callback);
 
 	void deleteImage(String key, AsyncCallback<Void> callback);
-
-
 }
