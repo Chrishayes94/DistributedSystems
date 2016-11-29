@@ -1,5 +1,7 @@
 package com.distributed.socialnetwork.client;
 
+import com.distributed.socialnetwork.client.gallery.PhotoGallery;
+import com.distributed.socialnetwork.client.gallery.UploadPhoto;
 import com.distributed.socialnetwork.client.loginView.LoginView;
 import com.distributed.socialnetwork.client.services.ConnectionService;
 import com.distributed.socialnetwork.client.services.ConnectionServiceAsync;
@@ -14,10 +16,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 
 /**
@@ -37,31 +37,20 @@ public class SocialNetwork implements EntryPoint {
 	private final ConnectionServiceAsync connectionService = GWT.create(ConnectionService.class);
 	private final WebUIServiceAsync webUIService = (WebUIServiceAsync) GWT.create(WebUIService.class);
 	
-	// Define variables used for layout
-	private final ScrollPanel panelMain = new ScrollPanel();
-	private final  HorizontalPanel panelTop = new HorizontalPanel();
-	
 	private FlowPanel header = new FlowPanel();
 	private FlowPanel content = new FlowPanel();
 	private FlowPanel footer = new FlowPanel();
 	
 	private LoginView loginView = new LoginView();
 	
+	private PhotoGallery galleryWidget;
+	private UploadPhoto uploadWidget;
+	
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-	      /** Create a Image widget 
-	      Image image = new Image();
-
-	      //set image source
-	      //image.setUrl("http://www.tutorialspoint.com/images/gwt-mini.png");
-
-	      // Add image to the root panel.
-	      panelMain.add(image);
-
-	      RootPanel.get("gwtContainer").add(panelMain);
-	      RootPanel.get("gwtContainer").add(panelTop);**/
+	      
 		header.clear();
 		header.add(loginView.getLoginHeader().getHpanel());
 		
@@ -76,6 +65,8 @@ public class SocialNetwork implements EntryPoint {
 		RootPanel.get("footer").add(footer);
 		
 		prepareLoginButton(loginView.getLoginButton(), loginView.getUsernameBox(), loginView.getPasswordBox());
+		
+		galleryWidget = new PhotoGallery(this);
 	}
 	
 	public void attemptToCreateUI() {
@@ -116,7 +107,8 @@ public class SocialNetwork implements EntryPoint {
 					@Override
 					public void onSuccess(Boolean result) {
 						if (result) {
-							// The details provided were correct.
+
+							RootPanel.get("gallery").add(galleryWidget);
 							
 						} else if (!result) {
 							// Flag an error message detailing there is a problem with either username or password.
