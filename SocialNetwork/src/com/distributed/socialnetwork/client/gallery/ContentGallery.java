@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.distributed.socialnetwork.client.SocialNetwork;
 import com.distributed.socialnetwork.client.services.UserContentService;
 import com.distributed.socialnetwork.client.services.UserContentServiceAsync;
-import com.distributed.socialnetwork.shared.UploadedContent;
+import com.distributed.socialnetwork.shared.ClientInfo;
 
 /**
  * Photogallery widget creation to display uploaded images
@@ -50,14 +50,14 @@ public class ContentGallery extends Composite implements GalleryUpdatedEventHand
 	}
 
 	public void refreshGallery() {
-		userContentService.getRecentlyUploaded(new AsyncCallback<List<UploadedContent>>() {
+		userContentService.getRecentlyUploaded(new AsyncCallback<List<ClientInfo>>() {
 
 					@Override
-					public void onSuccess(List<UploadedContent> contents) {
+					public void onSuccess(List<ClientInfo> contents) {
 						
 						int currentColumn = 0;
 						int currentRow = 0;
-						for (final UploadedContent content : contents) {
+						for (final ClientInfo content : contents) {
 
 							Image imageWidget = createContentWidget(content);
 
@@ -80,7 +80,7 @@ public class ContentGallery extends Composite implements GalleryUpdatedEventHand
 				});
 	}
 
-	private Image createContentWidget(final UploadedContent image) {
+	private Image createContentWidget(final ClientInfo image) {
 		final Image imageWidget = new Image();
 		imageWidget.setUrl(image.getServingUrl() + "=s200");
 		final DecoratedPopupPanel simplePopup = new DecoratedPopupPanel(true);

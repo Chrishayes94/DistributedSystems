@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.distributed.socialnetwork.client.services.UserContentService;
 import com.distributed.socialnetwork.client.services.UserContentServiceAsync;
-import com.distributed.socialnetwork.shared.UploadedContent;
+import com.distributed.socialnetwork.shared.ClientInfo;
 
 /**
  * 
@@ -50,19 +50,19 @@ public class ContentOverlay extends Composite implements HasHandlers {
 	@UiField
 	Label timestamp;
 
-	protected UploadedContent uploadedContent;
+	protected ClientInfo clientInfo;
 
-	public ContentOverlay(UploadedContent uploadedContent) {
+	public ContentOverlay(ClientInfo clientInfo) {
 		handlerManager = new HandlerManager(this);
 
-		this.uploadedContent = uploadedContent;
+		this.clientInfo = clientInfo;
 
 		initWidget(uiBinder.createAndBindUi(this));
 
-		image.setUrl(uploadedContent.getServingUrl());
-		timestamp.setText("Created at:" + uploadedContent.getCreatedAt());
+		image.setUrl(clientInfo.getServingUrl());
+		timestamp.setText("Created at:" + clientInfo.getCreatedAt());
 
-		uploadedContent.getOwnerId();
+		clientInfo.getOwnerId();
 		deleteButton.setText("Delete content");
 		deleteButton.setVisible(true);
 	}
@@ -83,7 +83,7 @@ public class ContentOverlay extends Composite implements HasHandlers {
 	@UiHandler("deleteButton")
 	void onClick(ClickEvent e) {
 		final ContentOverlay overlay = this;
-		imageService.deleteImage(uploadedContent.getKey(),
+		imageService.deleteImage(clientInfo.getKey(),
 				new AsyncCallback<Void>() {
 
 					@Override

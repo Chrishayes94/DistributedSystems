@@ -2,6 +2,7 @@ package com.distributed.socialnetwork.shared;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import com.ibm.icu.util.Calendar;
 
@@ -24,6 +25,10 @@ public class ClientInfo implements Serializable {
 	private String email;
 	private String password;
 	private String loginTime;
+	private String key;
+	private String ownerId;
+	private Date createdAt;
+	private String servingUrl;
 	
 	private ClientInfo(String email, String password) {
 		this.email = email;
@@ -44,5 +49,37 @@ public class ClientInfo implements Serializable {
 	
 	public String getLoginTime() {
 		return loginTime;
+	}
+	
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
+	}
+	
+	public String getOwnerId() {
+		return ownerId;
+	}
+
+	public void setOwnerId(String ownerId) {
+		this.ownerId = ownerId;
+	}
+	
+	public String getServingUrl() {
+		return servingUrl;
+	}
+	
+	public void setServingUrl(String servingUrl) {
+		this.servingUrl = servingUrl;
+	}
+
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
 	}
 }

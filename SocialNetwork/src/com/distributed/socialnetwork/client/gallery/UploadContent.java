@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.distributed.socialnetwork.client.gallery.ContentOverlay;
 import com.distributed.socialnetwork.client.services.UserContentService;
 import com.distributed.socialnetwork.client.services.UserContentServiceAsync;
-import com.distributed.socialnetwork.shared.UploadedContent;
+import com.distributed.socialnetwork.shared.ClientInfo;
 
 /**
  * Widget creation for uploading images. Implements UI binding (GWT)
@@ -69,7 +69,7 @@ public class UploadContent extends Composite implements HasHandlers {
 
 						String key = event.getResults();
 
-						userImageService.get(key,new AsyncCallback<UploadedContent>() {
+						userImageService.get(key,new AsyncCallback<ClientInfo>() {
 
 									@Override
 									public void onFailure(Throwable caught) {
@@ -78,7 +78,7 @@ public class UploadContent extends Composite implements HasHandlers {
 									}
 
 									@Override
-									public void onSuccess(UploadedContent result) {
+									public void onSuccess(ClientInfo result) {
 
 										ContentOverlay overlay = new ContentOverlay(result);
 										GalleryUpdatedEvent event = new GalleryUpdatedEvent();
