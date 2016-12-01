@@ -9,6 +9,7 @@ import com.distributed.socialnetwork.client.services.UserContentService;
 import com.distributed.socialnetwork.client.services.UserContentServiceAsync;
 import com.distributed.socialnetwork.client.services.WebUIService;
 import com.distributed.socialnetwork.client.services.WebUIServiceAsync;
+import com.distributed.socialnetwork.shared.ClientInfo;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -59,18 +60,13 @@ public class SocialNetwork implements EntryPoint {
 	public void onModuleLoad() {
 		header.clear();
 		header.add(loginView.getLoginHeader().getHpanel());
-		
 		content.clear();
 		content.add(loginView.getMainPanel());
-		
 		footer.clear();
 		footer.add(loginView.getLoginFooter().getHpanel());
-		
-		//RootPanel.get("content").add(content);
-		//RootPanel.get("header").add(header);
-		//RootPanel.get("footer").add(footer);
-		
 		prepareLoginButton(loginView.getLoginButton(), loginView.getUsernameBox(), loginView.getPasswordBox());
+		
+		
 		galleryView = new GalleryView(userService, this);
 		galleryView.getGalleryTable().insertRow(0);
 		galleryView.getGalleryTable().setWidget(0, 0, content);
