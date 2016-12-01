@@ -1,10 +1,8 @@
 package com.distributed.socialnetwork.shared;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.ibm.icu.util.Calendar;
 
 /**
  * <p>
@@ -30,13 +28,15 @@ public class ClientInfo implements Serializable {
 	private Date createdAt;
 	private String servingUrl;
 	
+	public ClientInfo() {}
+	
 	private ClientInfo(String email, String password) {
 		this.email = email;
 		this.password = password;
 		
-		Calendar cal = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-		this.loginTime = sdf.format(cal.getTime());
+		//Calendar cal = Calendar.getInstance();
+		//SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+		//this.loginTime = sdf.format(cal.getTime());
 	}
 	
 	public String getEmail() {

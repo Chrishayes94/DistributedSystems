@@ -41,15 +41,15 @@ public class GalleryView extends Composite implements GalleryUpdatedEventHandler
 	
 	private GalleryViewUiBinder uiBinder = GWT.create(GalleryViewUiBinder.class);
 
-	UserContentServiceAsync userContentService = GWT.create(UserContentService.class);
-
+	private final UserContentServiceAsync userContentService;
+	
 	private static final int GALLERY_WIDTH = 5;
 
 	@UiField
 	FlexTable galleryTable;
 	
-	public GalleryView() {	
-				
+	public GalleryView(UserContentServiceAsync userAsync) {	
+		this.userContentService = userAsync;
 		initWidget(uiBinder.createAndBindUi(this));
 		refreshGallery();
 		

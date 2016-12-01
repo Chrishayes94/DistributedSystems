@@ -32,8 +32,7 @@ public class UploadContent extends Composite implements HasHandlers {
 	private static UploadPhotoUiBinder uiBinder = GWT
 			.create(UploadPhotoUiBinder.class);
 
-	UserContentServiceAsync userImageService = GWT.create(UserContentService.class);
-
+	private final UserContentServiceAsync userImageService;
 	private HandlerManager handlerManager;
 
 	interface UploadPhotoUiBinder extends UiBinder<Widget, UploadContent> {
@@ -48,7 +47,8 @@ public class UploadContent extends Composite implements HasHandlers {
 	@UiField
 	FileUpload uploadField;
 
-	public UploadContent() {
+	public UploadContent(UserContentServiceAsync userAsync) {
+		this.userImageService = userAsync;
 		handlerManager = new HandlerManager(this);
 
 		initWidget(uiBinder.createAndBindUi(this));
@@ -80,7 +80,7 @@ public class UploadContent extends Composite implements HasHandlers {
 									@Override
 									public void onSuccess(ClientInfo result) {
 
-										ContentOverlay overlay = new ContentOverlay(result);
+										ContentOverlay overlay = new ContentOverlay(result, userImageService);
 										GalleryUpdatedEvent event = new GalleryUpdatedEvent();
 										fireEvent(event);
 

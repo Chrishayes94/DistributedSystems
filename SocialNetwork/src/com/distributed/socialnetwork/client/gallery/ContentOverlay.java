@@ -32,8 +32,7 @@ public class ContentOverlay extends Composite implements HasHandlers {
 
 	private static ContentOverlayUiBinder uiBinder = GWT.create(ContentOverlayUiBinder.class);
 
-	UserContentServiceAsync imageService = GWT.create(UserContentService.class);
-
+	private final UserContentServiceAsync imageService;
 	private HandlerManager handlerManager;
 
 	interface ContentOverlayUiBinder extends UiBinder<Widget, ContentOverlay> {
@@ -50,7 +49,8 @@ public class ContentOverlay extends Composite implements HasHandlers {
 
 	protected ClientInfo clientInfo;
 
-	public ContentOverlay(ClientInfo clientInfo) {
+	public ContentOverlay(ClientInfo clientInfo, final UserContentServiceAsync userAsync) {
+		this.imageService = userAsync;
 		handlerManager = new HandlerManager(this);
 
 		this.clientInfo = clientInfo;

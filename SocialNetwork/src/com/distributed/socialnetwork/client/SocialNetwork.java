@@ -5,6 +5,8 @@ import com.distributed.socialnetwork.client.gallery.UploadContent;
 import com.distributed.socialnetwork.client.loginView.LoginView;
 import com.distributed.socialnetwork.client.services.ConnectionService;
 import com.distributed.socialnetwork.client.services.ConnectionServiceAsync;
+import com.distributed.socialnetwork.client.services.UserContentService;
+import com.distributed.socialnetwork.client.services.UserContentServiceAsync;
 import com.distributed.socialnetwork.client.services.WebUIService;
 import com.distributed.socialnetwork.client.services.WebUIServiceAsync;
 import com.google.gwt.core.client.EntryPoint;
@@ -37,6 +39,7 @@ public class SocialNetwork implements EntryPoint {
 	 */
 	private final ConnectionServiceAsync connectionService = GWT.create(ConnectionService.class);
 	private final WebUIServiceAsync webUIService = (WebUIServiceAsync) GWT.create(WebUIService.class);
+	private final UserContentServiceAsync userService = (UserContentServiceAsync) GWT.create(UserContentService.class);
 	
 	private VerticalPanel vPanel = new VerticalPanel();
 	
@@ -45,7 +48,7 @@ public class SocialNetwork implements EntryPoint {
 	private FlowPanel footer = new FlowPanel();
 	
 	private LoginView loginView = new LoginView();
-	private GalleryView galleryView = new GalleryView();
+	private GalleryView galleryView = new GalleryView(userService);
 
 	private UploadContent uploadWidget;
 	
@@ -53,8 +56,8 @@ public class SocialNetwork implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-	      
-		/*header.clear();
+	     System.out.print("HELLO");
+		/**header.clear();
 		header.add(loginView.getLoginHeader().getHpanel());
 		
 		content.clear();
@@ -69,11 +72,11 @@ public class SocialNetwork implements EntryPoint {
 		
 		prepareLoginButton(loginView.getLoginButton(), loginView.getUsernameBox(), loginView.getPasswordBox());
 		
-		galleryWidget = new ContentGallery(this);*/
+		//galleryWidget = new ContentGallery(this); **/
 		
 		vPanel.add(galleryView.getMainPanel());
 		
-		RootPanel.get().add(vPanel);
+		//RootPanel.get().add(vPanel); 
 	}
 	
 	public void attemptToCreateUI() {

@@ -7,21 +7,29 @@
 
   <!-- Servlets -->
   <servlet>
-    <servlet-name>connectionServlet</servlet-name>
+    <servlet-name>connectionServiceImpl</servlet-name>
     <servlet-class>com.distributed.socialnetwork.server.ConnectionServiceImpl</servlet-class>
   </servlet>
   <servlet>
       <servlet-name>webUIServiceImpl</servlet-name>
       <servlet-class>com.distributed.socialnetwork.server.WebUIServiceImpl</servlet-class>
   </servlet>
+  <servlet>
+  		<servlet-name>userContentImpl</servlet-name>
+  		<servlet-class>com.distributed.socialnetwork.server.UserContentServiceImpl</servlet-class>
+  </servlet>
   
   <servlet-mapping>
-    <servlet-name>connectionServlet</servlet-name>
+    <servlet-name>connectionServiceImpl</servlet-name>
     <url-pattern>/socialnetwork/connection</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>webUIServiceImpl</servlet-name>
     <url-pattern>/socialnetwork/webUI</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>userContentImpl</servlet-name>
+  	<url-pattern>/socialnetwork/images</url-pattern>
   </servlet-mapping>
   
   <!-- Default page to serve -->
