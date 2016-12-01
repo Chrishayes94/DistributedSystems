@@ -2,6 +2,7 @@ package com.distributed.socialnetwork.client.gallery;
 
 import java.util.List;
 
+import com.distributed.socialnetwork.client.SocialNetwork;
 import com.distributed.socialnetwork.client.services.UserContentService;
 import com.distributed.socialnetwork.client.services.UserContentServiceAsync;
 import com.distributed.socialnetwork.shared.ClientInfo;
@@ -13,15 +14,21 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiTemplate;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratedPopupPanel;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -32,6 +39,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class GalleryView extends Composite implements GalleryUpdatedEventHandler {
 	
+	@UiTemplate("GalleryView.ui.xml")
 	interface GalleryViewUiBinder extends UiBinder<Widget, GalleryView> {}
 
 	private VerticalPanel vPanel = new VerticalPanel();
@@ -41,36 +49,22 @@ public class GalleryView extends Composite implements GalleryUpdatedEventHandler
 	
 	private GalleryViewUiBinder uiBinder = GWT.create(GalleryViewUiBinder.class);
 
-	private final UserContentServiceAsync userContentService;
+	private UserContentServiceAsync userContentService;
 	
 	private static final int GALLERY_WIDTH = 5;
 
+	private SocialNetwork parent;
+	
+	@UiField
+	DockLayoutPanel dockPanel;
+	
 	@UiField
 	FlexTable galleryTable;
 	
-	public GalleryView(UserContentServiceAsync userAsync) {	
-		this.userContentService = userAsync;
+	public GalleryView(UserContentServiceAsync userAsync, SocialNetwork main) {
+		this.parent = main;
 		initWidget(uiBinder.createAndBindUi(this));
-		refreshGallery();
-		
-	    DockLayoutPanel dockPanel = new DockLayoutPanel(Unit.EM);
-	    dockPanel.setStyleName("dockpanel");
-	
-	    // Add text all around
-	    dockPanel.add(new HTML("This is the first north component."));
-	    dockPanel.add(new HTML("This is the first south component."));
-	    dockPanel.add(new HTML("This is the west component."));
-	
-	    uploadWidget.addGalleryUpdatedEventHandler(galleryView);
-	    // Add scrollable text in the center
-	    galleryTable.setSize("100%", "100%");
-	    galleryTable.setWidget(0, 0, galleryView);
-	    galleryTable.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_MIDDLE);
-	    galleryTable.getFlexCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
-	    dockPanel.add(galleryTable);
-	
-	    // Add the widgets to the root panel.
-        vPanel.add(dockPanel);
+		//refreshGallery();
 	}
 
 	public void refreshGallery() {
@@ -85,7 +79,7 @@ public class GalleryView extends Composite implements GalleryUpdatedEventHandler
 
 							Image imageWidget = createContentWidget(content);
 
-							galleryTable.setWidget(currentRow, currentColumn, imageWidget);
+							//galleryTable.setWidget(currentRow, currentColumn, imageWidget);
 
 							currentColumn++;
 							if (currentColumn >= GALLERY_WIDTH) {
@@ -139,7 +133,11 @@ public class GalleryView extends Composite implements GalleryUpdatedEventHandler
 		refreshGallery();
 	}
 
-	public VerticalPanel getMainPanel() {
-		return this.vPanel;
+	public FlexTable getGalleryTable() {
+		return this.galleryTable;
+	}
+	
+	public DockLayoutPanel getDockPanel() {
+		return this.dockPanel;
 	}
 }

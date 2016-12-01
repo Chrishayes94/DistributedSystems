@@ -6,6 +6,9 @@
 			font-weight: bold;
 		}
 	</ui:style>
-	<g:FlexTable ui:field="galleryTable">
-	</g:FlexTable>
+	<g:DockLayoutPanel unit='EM' ui:field="dockPanel">
+		<g:north size="100">
+			    <g:FlexTable ui:field="galleryTable"></g:FlexTable>
+		</g:north>
+	</g:DockLayoutPanel>
 </ui:UiBinder> 

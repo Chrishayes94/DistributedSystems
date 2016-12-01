@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PasswordTextBox;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -48,7 +49,7 @@ public class SocialNetwork implements EntryPoint {
 	private FlowPanel footer = new FlowPanel();
 	
 	private LoginView loginView = new LoginView();
-	private GalleryView galleryView = new GalleryView(userService);
+	private GalleryView galleryView = null;
 
 	private UploadContent uploadWidget;
 	
@@ -56,8 +57,7 @@ public class SocialNetwork implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-	     System.out.print("HELLO");
-		/**header.clear();
+		header.clear();
 		header.add(loginView.getLoginHeader().getHpanel());
 		
 		content.clear();
@@ -66,17 +66,15 @@ public class SocialNetwork implements EntryPoint {
 		footer.clear();
 		footer.add(loginView.getLoginFooter().getHpanel());
 		
-		RootPanel.get("content").add(content);
-		RootPanel.get("header").add(header);
-		RootPanel.get("footer").add(footer);
+		//RootPanel.get("content").add(content);
+		//RootPanel.get("header").add(header);
+		//RootPanel.get("footer").add(footer);
 		
 		prepareLoginButton(loginView.getLoginButton(), loginView.getUsernameBox(), loginView.getPasswordBox());
-		
-		//galleryWidget = new ContentGallery(this); **/
-		
-		vPanel.add(galleryView.getMainPanel());
-		
-		//RootPanel.get().add(vPanel); 
+		galleryView = new GalleryView(userService, this);
+		galleryView.getGalleryTable().insertRow(0);
+		galleryView.getGalleryTable().setWidget(0, 0, content);
+		RootLayoutPanel.get().add(galleryView);
 	}
 	
 	public void attemptToCreateUI() {
