@@ -7,7 +7,6 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
@@ -28,12 +27,8 @@ import com.distributed.socialnetwork.shared.ClientInfo;
 
 public class ContentGallery extends Composite implements GalleryUpdatedEventHandler {
 
-	private static ContentGalleryUiBinder uiBinder = GWT.create(ContentGalleryUiBinder.class);
 
 	UserContentServiceAsync userContentService = GWT.create(UserContentService.class);
-
-	interface ContentGalleryUiBinder extends UiBinder<Widget, ContentGallery> {
-	}
 
 	private static final int GALLERY_WIDTH = 5;
 
@@ -42,12 +37,6 @@ public class ContentGallery extends Composite implements GalleryUpdatedEventHand
 	
 	SocialNetwork parent;
 	
-	public ContentGallery(SocialNetwork parent) {
-		this.parent = parent;
-		
-		initWidget(uiBinder.createAndBindUi(this));
-		refreshGallery();
-	}
 
 	public void refreshGallery() {
 		userContentService.getRecentlyUploaded(new AsyncCallback<List<ClientInfo>>() {

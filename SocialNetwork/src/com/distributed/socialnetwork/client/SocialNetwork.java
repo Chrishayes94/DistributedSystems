@@ -1,6 +1,5 @@
 package com.distributed.socialnetwork.client;
 
-import com.distributed.socialnetwork.client.gallery.ContentGallery;
 import com.distributed.socialnetwork.client.gallery.GalleryView;
 import com.distributed.socialnetwork.client.gallery.UploadContent;
 import com.distributed.socialnetwork.client.loginView.LoginView;
@@ -47,8 +46,7 @@ public class SocialNetwork implements EntryPoint {
 	
 	private LoginView loginView = new LoginView();
 	private GalleryView galleryView = new GalleryView();
-	
-	private ContentGallery galleryWidget;
+
 	private UploadContent uploadWidget;
 	
 	/**
@@ -116,8 +114,6 @@ public class SocialNetwork implements EntryPoint {
 					@Override
 					public void onSuccess(Boolean result) {
 						if (result) {
-
-							RootPanel.get("gallery").add(galleryWidget);
 							
 						} else if (!result) {
 							// Flag an error message detailing there is a problem with either username or password.
