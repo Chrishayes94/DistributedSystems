@@ -101,7 +101,7 @@ public class UploadContent extends Composite implements HasHandlers {
 	}
 
 	private void startNewUploadSession() {
-		userImageService.getBlobstoreUploadUrl(new AsyncCallback<String>() {
+		userImageService.getImageUploadUrl(new AsyncCallback<String>() {
 
 			@Override
 			public void onSuccess(String result) {

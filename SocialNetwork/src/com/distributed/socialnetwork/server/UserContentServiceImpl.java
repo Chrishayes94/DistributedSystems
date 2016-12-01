@@ -9,7 +9,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class UserContentServiceImpl extends RemoteServiceServlet implements UserContentService {
 
 	@Override
-	public String getBlobstoreUploadUrl() {
+	public String getImageUploadUrl() {
 		// TODO Auto-generated method stub
 		return null;
 	}

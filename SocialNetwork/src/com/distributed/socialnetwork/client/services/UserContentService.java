@@ -9,7 +9,7 @@ import com.distributed.socialnetwork.shared.ClientInfo;
 @RemoteServiceRelativePath("images")
 public interface UserContentService extends RemoteService  {
 	
-	public String getBlobstoreUploadUrl();
+	public String getImageUploadUrl();
 	public ClientInfo get(String key);
 	public List<ClientInfo> getRecentlyUploaded();
 	public void deleteImage(String key);
