@@ -3,11 +3,9 @@ package com.distributed.socialnetwork.client.gallery;
 import java.util.List;
 
 import com.distributed.socialnetwork.client.SocialNetwork;
-import com.distributed.socialnetwork.client.services.UserContentService;
 import com.distributed.socialnetwork.client.services.UserContentServiceAsync;
 import com.distributed.socialnetwork.shared.ClientInfo;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
@@ -17,18 +15,12 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratedPopupPanel;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -79,7 +71,7 @@ public class GalleryView extends Composite implements GalleryUpdatedEventHandler
 
 							Image imageWidget = createContentWidget(content);
 
-							//galleryTable.setWidget(currentRow, currentColumn, imageWidget);
+							galleryTable.setWidget(currentRow, currentColumn, imageWidget);
 
 							currentColumn++;
 							if (currentColumn >= GALLERY_WIDTH) {
@@ -92,7 +84,7 @@ public class GalleryView extends Composite implements GalleryUpdatedEventHandler
 
 					@Override
 					public void onFailure(Throwable caught) {
-						// TODO Auto-generated method stub
+						Window.alert("Refresh failed! Please try again...");
 
 					}
 				});

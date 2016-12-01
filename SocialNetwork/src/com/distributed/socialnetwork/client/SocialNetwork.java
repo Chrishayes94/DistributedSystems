@@ -13,14 +13,11 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -75,30 +72,6 @@ public class SocialNetwork implements EntryPoint {
 		galleryView.getGalleryTable().insertRow(0);
 		galleryView.getGalleryTable().setWidget(0, 0, content);
 		RootLayoutPanel.get().add(galleryView);
-	}
-	
-	public void attemptToCreateUI() {
-		webUIService.prepareHomeScreen(new AsyncCallback<Boolean>() {
-
-			@Override
-			public void onFailure(Throwable caught) {
-				Window.alert("RPC to prepareHomeScreen() failed");
-			}
-
-			@Override
-			public void onSuccess(Boolean result) {
-				if (result) {
-					RootPanel root = RootPanel.get("postbox");
-					Button submit = new Button("Post");
-						
-					root.add(new HTML("<form action=\"submit\" method=\"post\">"));
-					root.add(new HTML("		<div><textarea name=\"content\" rows=\"3\" cols=\"60\"></textarea></div>"));
-					root.add(submit);
-					root.add(new HTML("</form>"));
-				}
-			}
-			
-		});
 	}
 	
 	private void prepareLoginButton(final Button button, final TextBox box, final PasswordTextBox password) {
