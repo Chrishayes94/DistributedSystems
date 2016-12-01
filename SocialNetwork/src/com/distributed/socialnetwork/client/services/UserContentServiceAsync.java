@@ -11,7 +11,7 @@ import com.distributed.socialnetwork.shared.ClientInfo;
 
 public interface UserContentServiceAsync {
 
-	void getBlobstoreUploadUrl(AsyncCallback<String> callback);
+	void getImageUploadUrl(AsyncCallback<String> callback);
 
 	void get(String key, AsyncCallback<ClientInfo> callback);
 

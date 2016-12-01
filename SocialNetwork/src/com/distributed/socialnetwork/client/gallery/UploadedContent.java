@@ -18,6 +18,7 @@ public class UploadedContent implements Serializable {
 	String key;
 	String image;
 	Date createdAt;
+	String servingUrl;
 	String ownerId; // Refers to the User that uploaded this
 
 	public String getKey() {
@@ -50,5 +51,13 @@ public class UploadedContent implements Serializable {
 
 	public void setOwnerId(String ownerId) {
 		this.ownerId = ownerId;
+	}
+
+	public String getServingUrl() {
+		return servingUrl;
+	}
+
+	public void setServingUrl(String servingUrl) {
+		this.servingUrl = servingUrl;
 	}
 }

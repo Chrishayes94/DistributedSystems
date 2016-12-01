@@ -9,6 +9,7 @@ import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
@@ -18,7 +19,6 @@ import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.distributed.socialnetwork.client.gallery.ContentOverlay;
-import com.distributed.socialnetwork.client.services.UserContentService;
 import com.distributed.socialnetwork.client.services.UserContentServiceAsync;
 import com.distributed.socialnetwork.shared.ClientInfo;
 
@@ -54,7 +54,7 @@ public class UploadContent extends Composite implements HasHandlers {
 		initWidget(uiBinder.createAndBindUi(this));
 
 		uploadButton.setText("Upload");
-		uploadButton.setText("Loading...");
+		uploadButton.setText("uploading...");
 		uploadButton.setEnabled(false);
 		uploadField.setName("image");
 
@@ -73,7 +73,7 @@ public class UploadContent extends Composite implements HasHandlers {
 
 									@Override
 									public void onFailure(Throwable caught) {
-										// TODO Auto-generated method stub
+										Window.alert("Upload Failed! Please try again...");
 
 									}
 
@@ -84,8 +84,7 @@ public class UploadContent extends Composite implements HasHandlers {
 										GalleryUpdatedEvent event = new GalleryUpdatedEvent();
 										fireEvent(event);
 
-										// TODO: Add something here that says,
-										// hey, upload succeeded
+										Window.alert("Upload Successful!");
 
 										final PopupPanel imagePopup = new PopupPanel(true);
 										imagePopup.setAnimationEnabled(true);
@@ -102,7 +101,7 @@ public class UploadContent extends Composite implements HasHandlers {
 	}
 
 	private void startNewUploadSession() {
-		userImageService.getBlobstoreUploadUrl(new AsyncCallback<String>() {
+		userImageService.getImageUploadUrl(new AsyncCallback<String>() {
 
 			@Override
 			public void onSuccess(String result) {
@@ -115,7 +114,7 @@ public class UploadContent extends Composite implements HasHandlers {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
+				Window.alert("Could not start uploader");
 
 			}
 		});
