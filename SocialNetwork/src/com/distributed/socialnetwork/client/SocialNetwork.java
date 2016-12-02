@@ -57,7 +57,8 @@ public class SocialNetwork implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {		
-		connectionService.get("chrishayes_94@live.co.uk", new AsyncCallback<String>() {
+		// Testing the database connection.
+		connectionService.register("Alex Brightmore:alexbrightmore@hotmail.co.uk:newpassword", new AsyncCallback<ClientInfo>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -65,8 +66,10 @@ public class SocialNetwork implements EntryPoint {
 			}
 
 			@Override
-			public void onSuccess(String result) {
-				Window.alert(result);
+			public void onSuccess(ClientInfo result) {
+				if (result != null) 
+					Window.alert(result.toString());
+				else Window.alert("UNABLE TO CREATE USER");
 			}
 			
 		});
@@ -90,7 +93,7 @@ public class SocialNetwork implements EntryPoint {
 		button.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				connectionService.login(box.getText() + ":" + password.getText(), new AsyncCallback<Boolean>() {
+				connectionService.login(box.getText() + ":" + password.getText(), new AsyncCallback<ClientInfo>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
@@ -98,13 +101,10 @@ public class SocialNetwork implements EntryPoint {
 					}
 
 					@Override
-					public void onSuccess(Boolean result) {
-						if (result) {
+					public void onSuccess(ClientInfo result) {
+						if (result != null) {
 							
-						} else if (!result) {
-							// Flag an error message detailing there is a problem with either username or password.
-						}
-						else {
+						} else {
 							
 						}
 					}

@@ -20,6 +20,10 @@ public class ClientInfo implements Serializable {
 		return new ClientInfo(fullname, email, password);
 	}
 	
+	public static ClientInfo createClient(long id, String fullname, String email, String password) {
+		return new ClientInfo(id, fullname, email, password);
+	}
+	
 	public static long encode(String email) {
 		long value = 0;
 		for (char character : email.toCharArray()) {
@@ -39,10 +43,6 @@ public class ClientInfo implements Serializable {
 		return Long.parseLong(result);
 	}
 	
-	public static String getDatabaseEntry(String entry) {
-		return "'" + entry + "'";
-	}
-	
 	private String email;
 	private String password;
 	private String fullname;
@@ -56,6 +56,13 @@ public class ClientInfo implements Serializable {
 		this.email = email;
 		this.password = password;
 		this.ownerId = encode(email);
+	}
+	
+	private ClientInfo(long id, String fullname, String email, String password) {
+		this.fullname = fullname;
+		this.email = email;
+		this.password = password;
+		this.ownerId = id;
 	}
 	
 	public String getEmail() {
@@ -76,9 +83,9 @@ public class ClientInfo implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "(" + ownerId + ", " + 
-				getDatabaseEntry(email) + ", " +
-				getDatabaseEntry(password) + ", " + 
-				getDatabaseEntry(fullname) + ")";
+		return "(" + String.valueOf(ownerId) + ", " + 
+				email + ", " +
+				password + ", " + 
+				fullname + ")";
 	}
 }

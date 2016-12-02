@@ -20,27 +20,23 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class ConnectionServiceImpl extends RemoteServiceServlet implements ConnectionService {
 
 	@Override
-	public Boolean login(String loginInfo) {
-		// Create a new ClientInfo object, this will be used to track current loggedin users.
-		if (loginInfo.length() <= 1) return false;
-		ClientInfo client = ClientInfo.createClient(loginInfo.split(":")[0], loginInfo.split(":")[1], loginInfo.split(":")[2]);
-		
-		String password = new String(Base64.decode(DatabaseManager.getPassword(client.getEmail())));
-		if (password.equals(client.getPassword())) {
-			return true;
-		}
-		
-		return false;
+	public ClientInfo login(String loginInfo) {
+		String[] info = loginInfo.split(":");
+		if (loginInfo.length() <= 1) return null;
+		else return DatabaseManager.getUser(info[0], info[1]);
 	}
 	
 	@Override
-	public String get(String email) {
-		String password = DatabaseManager.getPassword(email);
-		
-		if (password == null || password.length() == 0) return "";
-		else if (password.equals("error")) return "Provided username and password do not match. Try again.";
-		return password;
+	public ClientInfo register(String loginInfo) {
+		String[] info = loginInfo.split(":");
+		if (loginInfo.length() <= 1) return null;
+		else {
+			ClientInfo client = ClientInfo.createClient(info[0], info[1], info[2]);
+			if (DatabaseManager.put(client)) return client;
+		}
+		return null;
 	}
+	
 	/**
 	 * Escape an html string. Escaping data received from the client helps to
 	 * prevent cross-site script vulnerabilities.
