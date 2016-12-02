@@ -27,7 +27,7 @@ public class UserContentServiceImpl extends RemoteServiceServlet implements User
 	}
 
 	@Override
-	public void deleteImage(String key) {
+	public void deleteImage(long key) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -92,7 +92,7 @@ public class GalleryView extends Composite implements GalleryUpdatedEventHandler
 
 	private Image createContentWidget(final ClientInfo image) {
 		final Image imageWidget = new Image();
-		imageWidget.setUrl(image.getServingUrl() + "=s200");
+		//imageWidget.setUrl(image.getServingUrl() + "=s200");
 		final DecoratedPopupPanel simplePopup = new DecoratedPopupPanel(true);
 
 		imageWidget.addMouseOverHandler(new MouseOverHandler() {
@@ -104,7 +104,7 @@ public class GalleryView extends Composite implements GalleryUpdatedEventHandler
 				int top = source.getAbsoluteTop() + source.getOffsetHeight() + 10;
 
 				simplePopup.setWidth("150px");
-				simplePopup.setWidget(new HTML("Uploaded: "+ image.getCreatedAt()));
+			//	simplePopup.setWidget(new HTML("Uploaded: "+ image.getCreatedAt()));
 				simplePopup.show();
 				simplePopup.setPopupPosition(left, top);
 			}

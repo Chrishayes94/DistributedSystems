@@ -74,7 +74,6 @@ public class UploadContent extends Composite implements HasHandlers {
 									@Override
 									public void onFailure(Throwable caught) {
 										Window.alert("Upload Failed! Please try again...");
-
 									}
 
 									@Override

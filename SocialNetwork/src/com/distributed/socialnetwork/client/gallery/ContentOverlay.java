@@ -57,8 +57,8 @@ public class ContentOverlay extends Composite implements HasHandlers {
 
 		initWidget(uiBinder.createAndBindUi(this));
 
-		image.setUrl(clientInfo.getServingUrl());
-		timestamp.setText("Created at:" + clientInfo.getCreatedAt());
+	//	image.setUrl(clientInfo.getServingUrl());
+	//	timestamp.setText("Created at:" + clientInfo.getCreatedAt());
 
 		clientInfo.getOwnerId();
 		deleteButton.setText("Delete content");
@@ -81,7 +81,7 @@ public class ContentOverlay extends Composite implements HasHandlers {
 	@UiHandler("deleteButton")
 	void onClick(ClickEvent e) {
 		final ContentOverlay overlay = this;
-		imageService.deleteImage(clientInfo.getKey(),
+		imageService.deleteImage(clientInfo.getOwnerId(),
 				new AsyncCallback<Void>() {
 
 					@Override

@@ -12,6 +12,6 @@ public interface UserContentService extends RemoteService  {
 	public String getImageUploadUrl();
 	public ClientInfo get(String key);
 	public List<ClientInfo> getRecentlyUploaded();
-	public void deleteImage(String key);
+	public void deleteImage(long key);
 
 }

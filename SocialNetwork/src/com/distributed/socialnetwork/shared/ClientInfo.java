@@ -16,11 +16,11 @@ public class ClientInfo implements Serializable {
 
 	private static final long serialVersionUID = 8439894809734599593L;
 	
-	public static ClientInfo createClient(String email, String password) {
-		return new ClientInfo(email, password);
+	public static ClientInfo createClient(String fullname, String email, String password) {
+		return new ClientInfo(fullname, email, password);
 	}
 	
-	public static long encodeEmail(String email) {
+	public static long encode(String email) {
 		long value = 0;
 		for (char character : email.toCharArray()) {
 			value *= 37;	
@@ -39,23 +39,23 @@ public class ClientInfo implements Serializable {
 		return Long.parseLong(result);
 	}
 	
+	public static String getDatabaseEntry(String entry) {
+		return "'" + entry + "'";
+	}
+	
 	private String email;
 	private String password;
-	private String loginTime;
-	private String key;
-	private String ownerId;
-	private Date createdAt;
-	private String servingUrl;
+	private String fullname;
+	
+	private long ownerId;
 	
 	public ClientInfo() {}
 	
-	private ClientInfo(String email, String password) {
+	private ClientInfo(String fullname, String email, String password) {
+		this.fullname = fullname;
 		this.email = email;
 		this.password = password;
-		
-		//Calendar cal = Calendar.getInstance();
-		//SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-		//this.loginTime = sdf.format(cal.getTime());
+		this.ownerId = encode(email);
 	}
 	
 	public String getEmail() {
@@ -66,39 +66,19 @@ public class ClientInfo implements Serializable {
 		return password;
 	}
 	
-	public String getLoginTime() {
-		return loginTime;
-	}
-	
-	public String getKey() {
-		return key;
+	public String getFullname() {
+		return fullname;
 	}
 
-	public void setKey(String key) {
-		this.key = key;
-	}
-	
-	public String getOwnerId() {
+	public long getOwnerId() {
 		return ownerId;
 	}
-
-	public void setOwnerId(String ownerId) {
-		this.ownerId = ownerId;
-	}
 	
-	public String getServingUrl() {
-		return servingUrl;
-	}
-	
-	public void setServingUrl(String servingUrl) {
-		this.servingUrl = servingUrl;
-	}
-
-	public Date getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(Date createdAt) {
-		this.createdAt = createdAt;
+	@Override
+	public String toString() {
+		return "(" + ownerId + ", " + 
+				getDatabaseEntry(email) + ", " +
+				getDatabaseEntry(password) + ", " + 
+				getDatabaseEntry(fullname) + ")";
 	}
 }

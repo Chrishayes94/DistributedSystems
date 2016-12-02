@@ -9,11 +9,13 @@ import com.distributed.socialnetwork.client.services.UserContentService;
 import com.distributed.socialnetwork.client.services.UserContentServiceAsync;
 import com.distributed.socialnetwork.client.services.WebUIService;
 import com.distributed.socialnetwork.client.services.WebUIServiceAsync;
+import com.distributed.socialnetwork.server.database.DatabaseManager;
 import com.distributed.socialnetwork.shared.ClientInfo;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -54,7 +56,21 @@ public class SocialNetwork implements EntryPoint {
 	/**
 	 * This is the entry point method.
 	 */
-	public void onModuleLoad() {
+	public void onModuleLoad() {		
+		connectionService.get("chrishayes_94@live.co.uk", new AsyncCallback<String>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert(caught.getMessage());
+			}
+
+			@Override
+			public void onSuccess(String result) {
+				Window.alert(result);
+			}
+			
+		});
+		/*
 		header.clear();
 		header.add(loginView.getLoginHeader().getHpanel());
 		content.clear();
@@ -67,7 +83,7 @@ public class SocialNetwork implements EntryPoint {
 		galleryView = new GalleryView(userService, this);
 		galleryView.getGalleryTable().insertRow(0);
 		galleryView.getGalleryTable().setWidget(0, 0, content);
-		RootLayoutPanel.get().add(galleryView);
+		RootLayoutPanel.get().add(galleryView);**/
 	}
 	
 	private void prepareLoginButton(final Button button, final TextBox box, final PasswordTextBox password) {
