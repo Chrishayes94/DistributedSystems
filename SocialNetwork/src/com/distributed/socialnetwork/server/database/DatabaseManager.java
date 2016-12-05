@@ -26,6 +26,7 @@ public class DatabaseManager {
 	protected static final String password = "S.erver123";
 	
 	/** Database Column Variables -- User Table **/
+	@SuppressWarnings("unused")
 	private static class User {
 		public static int ID = 1;
 		public static int USERID = 2;
@@ -35,6 +36,7 @@ public class DatabaseManager {
 	}
 
 	/** Database Column Variables -- Post Table **/
+	@SuppressWarnings("unused")
 	private static class Post {
 		public static int ID = 1;
 		public static int USERID = 2;
@@ -42,9 +44,7 @@ public class DatabaseManager {
 		public static int IMAGES = 4;
 		public static int POSTS = 5;
 	}
-	
-	
-	
+
 	/**
 	 * This method simply creates a new Instance of Connection to the database used for all SQL calls for INSERT, UPDATE and DELETE.
 	 * @return a brand new connection to the database.
@@ -58,21 +58,12 @@ public class DatabaseManager {
 			if (conn.isClosed()) return null;
 			return conn;
 		}
-		catch (SQLException e) {
-			System.out.print("SQLException: " + e.getMessage());
-			System.out.print("SQLState: " + e.getSQLState());
-			System.out.print("VendorError: " + e.getErrorCode());
-		} catch (ClassNotFoundException e) {
-			System.out.print("ClassNotFoundException: " + e.getMessage());
-		} catch (InstantiationException e) {
-			System.out.print("InstantiationException: " + e.getMessage());
-		} catch (IllegalAccessException e) {
-			System.out.print("IllegalAccessException: " + e.getMessage());
+		catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
 		}
 		return null;
 	}
 	
-	public static ClientInfo getUser(String email, String password) {
+	public static ClientInfo get(String email, String password) {
 		Connection conn = getConnection();
 		if (!check(conn, email)) return null;
 		
@@ -87,7 +78,7 @@ public class DatabaseManager {
 				String encoded = DatatypeConverter.printBase64Binary(password.getBytes("UTF-8"));
 				String databasePassword = rs.getString(User.PASSWORD);
 				
-				if (password.equals(databasePassword)) {
+				if (databasePassword.equals(encoded)) {
 					String userId = rs.getString(User.USERID);
 					String fullname = rs.getString(User.FULLNAME);
 					client = ClientInfo.createClient(
@@ -100,8 +91,7 @@ public class DatabaseManager {
 			conn.close();
 			return client;
 		}
-		catch (SQLException e){
-		} catch (UnsupportedEncodingException e) {
+		catch (SQLException | UnsupportedEncodingException e) {
 		}
 		return null;
 	}
@@ -116,16 +106,13 @@ public class DatabaseManager {
 			
 			prep.setLong(1, client.getOwnerId());
 			prep.setString(2, client.getEmail());
-			prep.setString(3, client.getPassword());
+			prep.setString(3, DatatypeConverter.printBase64Binary(client.getPassword().getBytes("UTF-8")));
 			prep.setString(4, client.getFullname());
 			prep.execute();
 			
 			conn.close();
 			return true;
-		} catch (SQLException e) {
-			System.out.print("SQLException: " + e.getMessage());
-			System.out.print("SQLState: " + e.getSQLState());
-			System.out.print("VendorError: " + e.getErrorCode());
+		} catch (SQLException | UnsupportedEncodingException e) {
 		}
 		
 		return false;
@@ -141,9 +128,6 @@ public class DatabaseManager {
 				return true;
 			}
 		} catch (SQLException e) {
-			System.out.print("SQLException: " + e.getMessage());
-			System.out.print("SQLState: " + e.getSQLState());
-			System.out.print("VendorError: " + e.getErrorCode());
 		}
 		return false;
 	}

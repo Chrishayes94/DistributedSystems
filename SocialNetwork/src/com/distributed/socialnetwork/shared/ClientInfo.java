@@ -47,7 +47,9 @@ public class ClientInfo implements Serializable {
 	private String password;
 	private String fullname;
 	
+	private String sessionId;
 	private long ownerId;
+	private boolean loggedIn;
 	
 	public ClientInfo() {}
 	
@@ -63,6 +65,14 @@ public class ClientInfo implements Serializable {
 		this.email = email;
 		this.password = password;
 		this.ownerId = id;
+	}
+	
+	public void setSessionID(String id) {
+		this.sessionId = id;
+	}
+	
+	public void setLoggedIn(boolean b) {
+		this.loggedIn = b;
 	}
 	
 	public String getEmail() {
@@ -81,11 +91,11 @@ public class ClientInfo implements Serializable {
 		return ownerId;
 	}
 	
-	@Override
-	public String toString() {
-		return "(" + String.valueOf(ownerId) + ", " + 
-				email + ", " +
-				password + ", " + 
-				fullname + ")";
+	public String getSessionID() {
+		return sessionId;
+	}
+	
+	public boolean getLoggedIn() {
+		return loggedIn;
 	}
 }

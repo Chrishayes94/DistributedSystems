@@ -1,16 +1,11 @@
 package com.distributed.socialnetwork.server;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
-
-import org.apache.xerces.impl.dv.util.Base64;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import com.distributed.socialnetwork.client.services.ConnectionService;
 import com.distributed.socialnetwork.server.database.DatabaseManager;
 import com.distributed.socialnetwork.shared.ClientInfo;
-import com.distributed.socialnetwork.shared.FieldVerifier;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
@@ -18,12 +13,35 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
  */
 @SuppressWarnings("serial")
 public class ConnectionServiceImpl extends RemoteServiceServlet implements ConnectionService {
-
+	
+	private int noClients = 0;
+	
 	@Override
 	public ClientInfo login(String loginInfo) {
 		String[] info = loginInfo.split(":");
 		if (loginInfo.length() <= 1) return null;
-		else return DatabaseManager.getUser(info[0], info[1]);
+		else {
+			ClientInfo client = DatabaseManager.get(info[0], info[1]);
+			if (client != null) {
+				noClients++;
+				client.setSessionID(this.getThreadLocalRequest().getSession().getId());
+				client.setLoggedIn(true);
+				storeUserInSession(client);
+				return client;
+			}	
+		}
+		return null;
+	}
+	
+	@Override
+	public ClientInfo loginFromSessionServer() {
+		return getUserAlreadyFromSession();
+	}
+	
+	@Override
+	public void logout() {
+		noClients--;
+		deleteUserFromSession();
 	}
 	
 	@Override
@@ -32,22 +50,35 @@ public class ConnectionServiceImpl extends RemoteServiceServlet implements Conne
 		if (loginInfo.length() <= 1) return null;
 		else {
 			ClientInfo client = ClientInfo.createClient(info[0], info[1], info[2]);
-			if (DatabaseManager.put(client)) return client;
+			if (DatabaseManager.put(client)) {
+				client.setSessionID(this.getThreadLocalRequest().getSession().getId());
+				client.setLoggedIn(true);
+				storeUserInSession(client);
+				return client;
+			}
 		}
 		return null;
 	}
 	
-	/**
-	 * Escape an html string. Escaping data received from the client helps to
-	 * prevent cross-site script vulnerabilities.
-	 * 
-	 * @param html the html string to escape
-	 * @return the escaped string
-	 */
-	private String escapeHtml(String html) {
-		if (html == null) {
-			return null;
-		}
-		return html.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+	private ClientInfo getUserAlreadyFromSession() {
+		ClientInfo user = null;
+		HttpServletRequest httpServletRequest = this.getThreadLocalRequest();
+		HttpSession session = httpServletRequest.getSession();
+		Object userObj = session.getAttribute("user");
+		if (userObj != null && userObj instanceof ClientInfo)
+			user = (ClientInfo) userObj;
+		return user;
+	}
+	
+	private void storeUserInSession(ClientInfo client) {
+		HttpServletRequest httpServletRequest = this.getThreadLocalRequest();
+		HttpSession session = httpServletRequest.getSession(true);
+		session.setAttribute("user", client);
+	}
+	
+	private void deleteUserFromSession() {
+		HttpServletRequest httpServletRequsest = this.getThreadLocalRequest();
+		HttpSession session = httpServletRequsest.getSession();
+		session.removeAttribute("user");
 	}
 }
