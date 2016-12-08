@@ -1,6 +1,5 @@
 package com.distributed.socialnetwork.client;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.distributed.socialnetwork.client.gallery.GalleryView;
@@ -61,7 +60,7 @@ public class SocialNetwork implements EntryPoint {
 	public void onModuleLoad() {
 		final FormPanel form = new FormPanel();
 		form.setAction("/upload");
-
+		
 		form.setEncoding(FormPanel.ENCODING_MULTIPART);
 		form.setMethod(FormPanel.METHOD_POST);
 		
@@ -83,6 +82,8 @@ public class SocialNetwork implements EntryPoint {
 			public void onSubmitComplete(SubmitCompleteEvent event) {
 			}
 		});
+		
+		RootPanel.getBodyElement().setAttribute("margin", "0px");
 		RootPanel.get().add(form);
 		
 	}

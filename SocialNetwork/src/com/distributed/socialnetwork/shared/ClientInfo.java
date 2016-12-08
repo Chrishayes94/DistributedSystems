@@ -1,8 +1,6 @@
 package com.distributed.socialnetwork.shared;
 
 import java.io.Serializable;
-import java.util.Date;
-
 
 /**
  * <p>
@@ -48,7 +46,7 @@ public class ClientInfo implements Serializable {
 	}
 	
 	private String email;
-	private String password;
+	private byte[] password;
 	private String fullname;
 	
 	private String sessionId;
@@ -64,14 +62,14 @@ public class ClientInfo implements Serializable {
 	private ClientInfo(String fullname, String email, String password) {
 		this.fullname = fullname;
 		this.email = email;
-		this.password = password;
+		this.password = password.getBytes();
 		this.ownerId = encode(email);
 	}
 	
 	private ClientInfo(long id, String fullname, String email, String password) {
 		this.fullname = fullname;
 		this.email = email;
-		this.password = password;
+		this.password = password.getBytes();
 		this.ownerId = id;
 	}
 	
@@ -87,7 +85,7 @@ public class ClientInfo implements Serializable {
 		return email;
 	}
 	
-	public String getPassword() {
+	public byte[] getPassword() {
 		return password;
 	}
 	

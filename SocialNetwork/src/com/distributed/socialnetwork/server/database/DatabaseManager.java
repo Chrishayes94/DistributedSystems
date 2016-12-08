@@ -1,6 +1,5 @@
 package com.distributed.socialnetwork.server.database;
 
-import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,6 +12,7 @@ import java.util.List;
 import javax.xml.bind.DatatypeConverter;
 
 import com.distributed.socialnetwork.shared.ClientInfo;
+import com.distributed.socialnetwork.shared.ImageObject;
 import com.distributed.socialnetwork.shared.PostObject;
 
 /**
@@ -50,6 +50,12 @@ public class DatabaseManager {
 		public static int POSTS = 5; // URL Links and Text posts
 	}
 
+	@SuppressWarnings("unused")
+	private static class Images {
+		public static int ID = 1;
+		public static int IMAGEID = 2;
+		public static int CREATIONDATE = 3;
+	}
 	/**
 	 * This method simply creates a new Instance of Connection to the database used for all SQL calls for INSERT, UPDATE and DELETE.
 	 * @return a brand new connection to the database.
@@ -87,10 +93,9 @@ public class DatabaseManager {
 			
 			if (rs.first()) {
 				// First lets check the passwords
-				String encoded = DatatypeConverter.printBase64Binary(password.getBytes("UTF-8"));
 				String databasePassword = rs.getString(User.PASSWORD);
 				
-				if (databasePassword.equals(encoded)) {
+				if (databasePassword.equals(password)) {
 					String userId = rs.getString(User.USERID);
 					String fullname = rs.getString(User.FULLNAME);
 					client = ClientInfo.create(
@@ -103,7 +108,7 @@ public class DatabaseManager {
 			conn.close();
 			return client;
 		}
-		catch (SQLException | UnsupportedEncodingException e) {
+		catch (SQLException e) {
 		}
 		return null;
 	}
@@ -132,7 +137,7 @@ public class DatabaseManager {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Pass the provided @{code} client to the database. All required information is secured e.g. Password 
 	 * and possibly email address. Checks for any previous users under the same email address are performed to stop
@@ -150,13 +155,13 @@ public class DatabaseManager {
 			
 			prep.setLong(User.USERID, client.getOwnerId());
 			prep.setString(User.EMAIL, client.getEmail());
-			prep.setString(User.PASSWORD, DatatypeConverter.printBase64Binary(client.getPassword().getBytes("UTF-8")));
+			prep.setString(User.PASSWORD, DatatypeConverter.printBase64Binary(client.getPassword()));
 			prep.setString(User.FULLNAME, client.getFullname());
 			prep.execute();
 			
 			conn.close();
 			return true;
-		} catch (SQLException | UnsupportedEncodingException e) {
+		} catch (SQLException e) {
 		}
 		
 		return false;
@@ -176,13 +181,31 @@ public class DatabaseManager {
 			
 			prep.setLong(Post.ID, post.getID());
 			prep.setString(Post.DATETIME, post.getCreationDate().toString());
-			prep.setString(Post.IMAGES, post.getImages());
+			prep.setString(Post.IMAGES, post.getImagesUnsplit());
 			prep.setString(Post.POSTS, post.getPosts());
 			prep.execute();
 			
 			conn.close();
 			return true;
 		} catch (SQLException e) {
+		}
+		return false;
+	}
+	
+	public static boolean put(ImageObject image) {
+		Connection conn = getConnection();
+		
+		try {
+			String sql = "INSERT INTO Images (imageid, datetime) VALUES (? , ?)";
+			PreparedStatement prep = conn.prepareStatement(sql);
+			
+			prep.setLong(Images.IMAGEID, image.getID());
+			prep.setString(Images.CREATIONDATE, image.getCreationDate().toString());
+			prep.execute();
+			
+			conn.close();
+			return true;
+		} catch (SQLException e){
 		}
 		return false;
 	}
@@ -204,6 +227,19 @@ public class DatabaseManager {
 			if (rs.first()) {
 				return true;
 			}
+		} catch (SQLException e) {
+		}
+		return false;
+	}
+	
+	public static boolean check(long id) {
+		Connection conn = getConnection();
+		try {
+			Statement stmt = conn.createStatement();
+			String sql = "SELECT * FROM Images where imageid=i" + id + "'";
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			if (rs.first()) return true;
 		} catch (SQLException e) {
 		}
 		return false;

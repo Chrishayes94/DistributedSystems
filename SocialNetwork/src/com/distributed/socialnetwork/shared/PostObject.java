@@ -3,6 +3,8 @@ package com.distributed.socialnetwork.shared;
 import java.io.Serializable;
 import java.sql.Date;
 
+import com.distributed.socialnetwork.server.UploadContentServlet;
+
 public class PostObject implements Serializable {
 
 	private static final long serialVersionUID = 6191883700216273374L;
@@ -11,12 +13,16 @@ public class PostObject implements Serializable {
 		return new PostObject();
 	}
 	
-	public static PostObject create(int id, Date time, String images, String posts) {
+	public static PostObject create(int id, String time, String images, String posts) {
 		return new PostObject(id, time, images, posts);
 	}
 	
+	public static String getServingUrl() {
+		return UploadContentServlet.REMOTE_DIRECTORY;
+	}
+	
 	private int userid;
-	private Date dateTime;
+	private String dateTime;
 	private String images;
 	private String posts;
 	
@@ -24,7 +30,7 @@ public class PostObject implements Serializable {
 	
 	private PostObject() {}
 	
-	private PostObject(int id, Date time, String images, String posts) {
+	private PostObject(int id, String time, String images, String posts) {
 		if (images.length() == 0 || images == null) imagePost = false;
 		
 		this.userid = id;
@@ -37,11 +43,15 @@ public class PostObject implements Serializable {
 		return userid;
 	}
 	
-	public Date getCreationDate() {
+	public String getCreationDate() {
 		return dateTime;
 	}
 	
-	public String getImages() {
+	public String[] getImages() {
+		return images.split(",");
+	}
+	
+	public String getImagesUnsplit() {
 		return images;
 	}
 	
