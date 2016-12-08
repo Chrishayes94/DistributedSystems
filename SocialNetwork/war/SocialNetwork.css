@@ -17,8 +17,6 @@ body {
 }
 
 .gwt-TextBox {
-	border:2px solid #456879;
-	border-radius:10px;
 	margin: 5px 5px 5px;
 	width: 600px;
 	height: 50px;

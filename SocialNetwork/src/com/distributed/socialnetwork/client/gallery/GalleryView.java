@@ -5,6 +5,7 @@ import java.util.List;
 import com.distributed.socialnetwork.client.SocialNetwork;
 import com.distributed.socialnetwork.client.services.UserContentServiceAsync;
 import com.distributed.socialnetwork.shared.ClientInfo;
+import com.distributed.socialnetwork.shared.PostObject;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
@@ -53,6 +54,9 @@ public class GalleryView extends Composite implements GalleryUpdatedEventHandler
 	@UiField
 	FlexTable galleryTable;
 	
+	private int currentColumn = 0;
+	private int currentRow = 0;
+	
 	public GalleryView(SocialNetwork main) {
 		this.parent = main;
 		initWidget(uiBinder.createAndBindUi(this));
@@ -65,13 +69,11 @@ public class GalleryView extends Composite implements GalleryUpdatedEventHandler
 					@Override
 					public void onSuccess(List<ClientInfo> contents) {
 						
-						int currentColumn = 0;
-						int currentRow = 0;
 						for (final ClientInfo content : contents) {
 
-							Image imageWidget = createContentWidget(content);
+							//Image imageWidget = createContentWidget(content);
 
-							galleryTable.setWidget(currentRow, currentColumn, imageWidget);
+							//galleryTable.setWidget(currentRow, currentColumn, imageWidget);
 
 							currentColumn++;
 							if (currentColumn >= GALLERY_WIDTH) {
@@ -90,9 +92,9 @@ public class GalleryView extends Composite implements GalleryUpdatedEventHandler
 				});
 	}
 
-	private Image createContentWidget(final ClientInfo image) {
+	private Image createContentWidget(final PostObject image) {
 		final Image imageWidget = new Image();
-		//imageWidget.setUrl(image.getServingUrl() + "=s200");
+		//imageWidget.setUrl(PostObject.getServingUrl() + "=s200");
 		final DecoratedPopupPanel simplePopup = new DecoratedPopupPanel(true);
 
 		imageWidget.addMouseOverHandler(new MouseOverHandler() {
@@ -104,7 +106,7 @@ public class GalleryView extends Composite implements GalleryUpdatedEventHandler
 				int top = source.getAbsoluteTop() + source.getOffsetHeight() + 10;
 
 				simplePopup.setWidth("150px");
-			//	simplePopup.setWidget(new HTML("Uploaded: "+ image.getCreatedAt()));
+				simplePopup.setWidget(new HTML("Uploaded: "+ image.getCreationDate()));
 				simplePopup.show();
 				simplePopup.setPopupPosition(left, top);
 			}
