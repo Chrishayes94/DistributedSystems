@@ -5,28 +5,19 @@ import java.util.logging.Logger;
 
 import com.distributed.socialnetwork.client.gallery.GalleryView;
 import com.distributed.socialnetwork.client.gallery.UploadContent;
-import com.distributed.socialnetwork.client.loginView.LoginView;
 import com.distributed.socialnetwork.client.services.ConnectionService;
 import com.distributed.socialnetwork.client.services.ConnectionServiceAsync;
 import com.distributed.socialnetwork.client.services.UserContentService;
 import com.distributed.socialnetwork.client.services.UserContentServiceAsync;
 import com.distributed.socialnetwork.client.services.WebUIService;
 import com.distributed.socialnetwork.client.services.WebUIServiceAsync;
-import com.distributed.socialnetwork.server.database.DatabaseManager;
-import com.distributed.socialnetwork.shared.ClientInfo;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.logging.client.HasWidgetsLogHandler;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FileUpload;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FormPanel;
-import com.google.gwt.user.client.ui.PasswordTextBox;
-import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -60,11 +51,6 @@ public class SocialNetwork implements EntryPoint {
 	
 	private VerticalPanel vPanel = new VerticalPanel();
 	
-	private FlowPanel header = new FlowPanel();
-	private FlowPanel content = new FlowPanel();
-	private FlowPanel footer = new FlowPanel();
-	
-	private LoginView loginView = new LoginView();
 	private GalleryView galleryView = null;
 
 	private UploadContent uploadWidget;
@@ -75,7 +61,7 @@ public class SocialNetwork implements EntryPoint {
 	public void onModuleLoad() {
 		final FormPanel form = new FormPanel();
 		form.setAction("/upload");
-		
+
 		form.setEncoding(FormPanel.ENCODING_MULTIPART);
 		form.setMethod(FormPanel.METHOD_POST);
 		

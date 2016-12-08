@@ -1,4 +1,4 @@
-package com.distributed.socialnetwork.server.posts;
+package com.distributed.socialnetwork.shared;
 
 import java.io.Serializable;
 import java.sql.Date;
@@ -6,13 +6,6 @@ import java.sql.Date;
 public class PostObject implements Serializable {
 
 	private static final long serialVersionUID = 6191883700216273374L;
-	
-	private int id;
-	private Date dateTime;
-	private String images;
-	private String posts;
-	
-	private boolean imagePost = true;
 	
 	public static PostObject create() {
 		return new PostObject();
@@ -22,19 +15,26 @@ public class PostObject implements Serializable {
 		return new PostObject(id, time, images, posts);
 	}
 	
+	private int userid;
+	private Date dateTime;
+	private String images;
+	private String posts;
+	
+	private boolean imagePost = true;
+	
 	private PostObject() {}
 	
 	private PostObject(int id, Date time, String images, String posts) {
 		if (images.length() == 0 || images == null) imagePost = false;
 		
-		this.id = id;
+		this.userid = id;
 		this.dateTime = time;
 		this.images = images;
 		this.posts = posts;
 	}
 	
 	public int getID() {
-		return id;
+		return userid;
 	}
 	
 	public Date getCreationDate() {

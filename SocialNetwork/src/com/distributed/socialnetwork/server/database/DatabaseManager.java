@@ -12,8 +12,8 @@ import java.util.List;
 
 import javax.xml.bind.DatatypeConverter;
 
-import com.distributed.socialnetwork.server.posts.PostObject;
 import com.distributed.socialnetwork.shared.ClientInfo;
+import com.distributed.socialnetwork.shared.PostObject;
 
 /**
  * This class handles all connections to and from the Database.
@@ -108,6 +108,12 @@ public class DatabaseManager {
 		return null;
 	}
 	
+	/**
+	 * Get Method to return a list of users with the specified keyword, this can be only the fullname of the required
+	 * user, however code can be put in place to check for users via email (IF SECURE).
+	 * @param keyword - The phrase that will be searched under the column 'fullname' from the database.
+	 * @return - The return value containing all of the users wit hthe provided name.
+	 */
 	public static List<ClientInfo> get(String keyword) {
 		Connection conn = getConnection();
 		try {
@@ -127,6 +133,13 @@ public class DatabaseManager {
 		return null;
 	}
 	
+	/**
+	 * Pass the provided @{code} client to the database. All required information is secured e.g. Password 
+	 * and possibly email address. Checks for any previous users under the same email address are performed to stop
+	 * multi-user creation.
+	 * @param client - The client that will be passed into the database.
+	 * @return  - Return the state of the result, if any error occurs we will flag no entry created.
+	 */
 	public static boolean put(ClientInfo client) {
 		Connection conn = getConnection();
 		if (check(conn, client.getEmail())) return false;
@@ -135,10 +148,10 @@ public class DatabaseManager {
 			String sql = "INSERT INTO Users (userid, email, password, fullname) VALUES (?, ?, ?, ?)";
 			PreparedStatement prep = conn.prepareStatement(sql);
 			
-			prep.setLong(1, client.getOwnerId());
-			prep.setString(2, client.getEmail());
-			prep.setString(3, DatatypeConverter.printBase64Binary(client.getPassword().getBytes("UTF-8")));
-			prep.setString(4, client.getFullname());
+			prep.setLong(User.USERID, client.getOwnerId());
+			prep.setString(User.EMAIL, client.getEmail());
+			prep.setString(User.PASSWORD, DatatypeConverter.printBase64Binary(client.getPassword().getBytes("UTF-8")));
+			prep.setString(User.FULLNAME, client.getFullname());
 			prep.execute();
 			
 			conn.close();
@@ -149,12 +162,39 @@ public class DatabaseManager {
 		return false;
 	}
 	
+	/**
+	 * Pass the provided @{code} post to the database. All required information is secured e.g. Image locations.
+	 * @param post - The post object to be passed into the database. 
+	 * @return - Return the state of the result, any error then false will be returned.
+	 */
 	public static boolean put(PostObject post) {
 		Connection conn = getConnection();
 		
+		try {
+			String sql = "INSERT INTO Posts (userid, datetime, images, posts) VALUES (?, ?, ?, ?)";
+			PreparedStatement prep = conn.prepareStatement(sql);
+			
+			prep.setLong(Post.ID, post.getID());
+			prep.setString(Post.DATETIME, post.getCreationDate().toString());
+			prep.setString(Post.IMAGES, post.getImages());
+			prep.setString(Post.POSTS, post.getPosts());
+			prep.execute();
+			
+			conn.close();
+			return true;
+		} catch (SQLException e) {
+		}
 		return false;
 	}
 	
+	/**
+	 * A method that will query the table Users for any reference of the parameter @{code} email under the email column.
+	 * This method is used so that users are not able to create multiple accounts using the same address.
+	 * Makes the social network unique to separate users.
+	 * @param conn - The current connection to database so we don't have to create multiple requests.
+	 * @param email - The query that will be passed into the database.
+	 * @return - Return the state of the result, true if there are any results.
+	 */
 	private static boolean check(Connection conn, String email) {
 		try {
 			Statement stmt = conn.createStatement();

@@ -44,6 +44,11 @@ public class UploadContentServlet extends HttpServlet {
 		this.filePath = getServletContext().getInitParameter("file-upload");
 	}
 	
+	protected boolean upload(File f) {
+		
+		return false;
+	}
+	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException {
 		throw new ServletException("UploadContentServlet does not implement a GET function, possible threat detected");
@@ -92,7 +97,6 @@ public class UploadContentServlet extends HttpServlet {
 					while (new File(factory.getRepository().getAbsolutePath() + "\\" + ClientInfo.encode(name)).exists()) {
 						name = String.valueOf(generate());
 					}
-					
 					file = new File(factory.getRepository().getAbsolutePath() + "\\" + ClientInfo.encode(name) + getType(fi.getName()));
 					fi.write(file);
 					out.println("Uploaded filename: " + file.getName() + "<br>");
