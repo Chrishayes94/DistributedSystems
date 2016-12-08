@@ -15,6 +15,8 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;
@@ -56,23 +58,39 @@ public class SocialNetwork implements EntryPoint {
 	private GalleryView galleryView = new GalleryView(this);
 
 	private UploadContent uploadWidget;
-	
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
+		RootPanel.get().add(createPostForm());
+		
+		final FormPanel form2 = new FormPanel();
+		HorizontalPanel panel2 = new HorizontalPanel();
+		panel2.add(galleryView.getGalleryTable());
+		
+		form2.setWidget(panel2);
+		
+		RootPanel.get().add(form2);
+		
+	}
+	
+	private FormPanel createPostForm() {
 		final FormPanel form1 = new FormPanel();
 		final TextArea textPost = new TextArea();
+		final FileUpload upload = new FileUpload();
+		final HorizontalPanel panel1 = new HorizontalPanel();
+		
 		form1.setAction("/upload");
 		
+		textPost.getElement().setAttribute("maxlength", "250");
 		form1.getElement().getStyle().setBackgroundColor("#EE5C42");
+		upload.getElement().setAttribute("accept", "image/*");
+		
 		form1.setEncoding(FormPanel.ENCODING_MULTIPART);
 		form1.setMethod(FormPanel.METHOD_POST);
 		
-		HorizontalPanel panel1 = new HorizontalPanel();
 		form1.setWidget(panel1);
 		panel1.add(textPost);
-		FileUpload upload = new FileUpload();
 		upload.setName("file");
 		panel1.add(upload);
 		
@@ -88,15 +106,6 @@ public class SocialNetwork implements EntryPoint {
 			public void onSubmitComplete(SubmitCompleteEvent event) {
 			}
 		});
-		RootPanel.get().add(form1);
-		
-		final FormPanel form2 = new FormPanel();
-		HorizontalPanel panel2 = new HorizontalPanel();
-		panel2.add(galleryView.getGalleryTable());
-		
-		form2.setWidget(panel2);
-		
-		RootPanel.get().add(form2);
-		
+		return form1;
 	}
 }

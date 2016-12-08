@@ -21,6 +21,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import com.distributed.socialnetwork.server.database.DatabaseManager;
 import com.distributed.socialnetwork.shared.ClientInfo;
+import com.google.gwt.user.client.Window;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
@@ -33,9 +34,9 @@ public class UploadContentServlet extends HttpServlet {
 	
 	public static final String REMOTE_DIRECTORY = "/upload/images/";
 	
-	protected static final String URL_PATH = "82.7.208.210";
+	protected static final String URL_PATH = "192.168.0.10";
 	protected static final String USER = "post";
-	protected static final byte[] PASSWORD = DatatypeConverter.parseBase64Binary("random");
+	protected static final String PASSWORD = Utils.encode("random");
 	protected static final int SSH_PORT = 22;
 	
 	private static long generate() {
@@ -54,7 +55,7 @@ public class UploadContentServlet extends HttpServlet {
 		try {
 			JSch jsch = new JSch();
 			final Session session = jsch.getSession(USER, URL_PATH, SSH_PORT);
-			session.setPassword(DatatypeConverter.printBase64Binary(PASSWORD));
+			session.setPassword(Utils.decode(PASSWORD));
 			session.setConfig("StrictHostKeyChecking", "no");
 			session.connect();
 			
@@ -66,6 +67,7 @@ public class UploadContentServlet extends HttpServlet {
 			return true;
 		}
 		catch (Exception ex) {
+			System.out.println(ex.getMessage());
 		}
 		return false;
 	}
@@ -104,10 +106,13 @@ public class UploadContentServlet extends HttpServlet {
 				}
 				if (!fi.isFormField()) {
 					String name = String.valueOf(generate());
-					while (DatabaseManager.check(generate())) {
+					File f = File.createTempFile(String.valueOf(ClientInfo.encode(name)), getType(fi.getName()));
+					fi.write(f);
+					upload(f);
+					/**while (DatabaseManager.check(generate())) {
 						name = String.valueOf(generate());
 					}
-					upload(new File(ClientInfo.encode(name) + getType(fi.getName())));
+					upload(new File(ClientInfo.encode(name) + getType(fi.getName())));**/
 				}
 			}
 		} catch (Exception e) {

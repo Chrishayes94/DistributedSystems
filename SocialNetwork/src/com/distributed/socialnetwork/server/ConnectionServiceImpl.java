@@ -1,5 +1,6 @@
 package com.distributed.socialnetwork.server;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import com.distributed.socialnetwork.client.services.ConnectionService;
 import com.distributed.socialnetwork.server.database.DatabaseManager;
 import com.distributed.socialnetwork.shared.ClientInfo;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
 
 /**
  * The server-side implementation of the RPC service.
