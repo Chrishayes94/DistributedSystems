@@ -53,7 +53,7 @@ public class GalleryView extends Composite implements GalleryUpdatedEventHandler
 	@UiField
 	FlexTable galleryTable;
 	
-	public GalleryView(UserContentServiceAsync userAsync, SocialNetwork main) {
+	public GalleryView(SocialNetwork main) {
 		this.parent = main;
 		initWidget(uiBinder.createAndBindUi(this));
 		//refreshGallery();

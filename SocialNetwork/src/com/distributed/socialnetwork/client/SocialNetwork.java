@@ -1,5 +1,6 @@
 package com.distributed.socialnetwork.client;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.distributed.socialnetwork.client.gallery.GalleryView;
@@ -18,10 +19,12 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -50,7 +53,7 @@ public class SocialNetwork implements EntryPoint {
 	
 	private VerticalPanel vPanel = new VerticalPanel();
 	
-	private GalleryView galleryView = null;
+	private GalleryView galleryView = new GalleryView(this);
 
 	private UploadContent uploadWidget;
 	
@@ -58,33 +61,42 @@ public class SocialNetwork implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-		final FormPanel form = new FormPanel();
-		form.setAction("/upload");
+		final FormPanel form1 = new FormPanel();
+		final TextBox textPost = new TextBox();
+		form1.setAction("/upload");
+
+		form1.getElement().getStyle().setBackgroundColor("#EE5C42");
+		form1.setEncoding(FormPanel.ENCODING_MULTIPART);
+		form1.setMethod(FormPanel.METHOD_POST);
 		
-		form.setEncoding(FormPanel.ENCODING_MULTIPART);
-		form.setMethod(FormPanel.METHOD_POST);
-		
-		VerticalPanel panel = new VerticalPanel();
-		form.setWidget(panel);
+		HorizontalPanel panel1 = new HorizontalPanel();
+		form1.setWidget(panel1);
+		panel1.add(textPost);
 		FileUpload upload = new FileUpload();
 		upload.setName("file");
-		panel.add(upload);
+		panel1.add(upload);
 		
-		panel.add(new Button("Submit", new ClickHandler() {
+		panel1.add(new Button("Submit", new ClickHandler() {
 			public void onClick(ClickEvent event)  {
-				form.submit();
+				form1.submit();
 			}
 		}));
 		
-		form.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
+		form1.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
 			
 			@Override
 			public void onSubmitComplete(SubmitCompleteEvent event) {
 			}
 		});
+		RootPanel.get().add(form1);
 		
-		RootPanel.getBodyElement().setAttribute("margin", "0px");
-		RootPanel.get().add(form);
+		final FormPanel form2 = new FormPanel();
+		HorizontalPanel panel2 = new HorizontalPanel();
+		panel2.add(galleryView.getGalleryTable());
+		
+		form2.setWidget(panel2);
+		
+		RootPanel.get().add(form2);
 		
 	}
 }
