@@ -62,9 +62,9 @@ public class SocialNetwork implements EntryPoint {
 	 */
 	public void onModuleLoad() {
 		final FormPanel form1 = new FormPanel();
-		final TextBox textPost = new TextBox();
+		final TextArea textPost = new TextArea();
 		form1.setAction("/upload");
-
+		
 		form1.getElement().getStyle().setBackgroundColor("#EE5C42");
 		form1.setEncoding(FormPanel.ENCODING_MULTIPART);
 		form1.setMethod(FormPanel.METHOD_POST);
