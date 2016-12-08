@@ -16,11 +16,15 @@ public class ClientInfo implements Serializable {
 
 	private static final long serialVersionUID = 8439894809734599593L;
 	
-	public static ClientInfo createClient(String fullname, String email, String password) {
+	public static ClientInfo create(String fullname) {
+		return new ClientInfo(fullname);
+	}
+	
+	public static ClientInfo create(String fullname, String email, String password) {
 		return new ClientInfo(fullname, email, password);
 	}
 	
-	public static ClientInfo createClient(long id, String fullname, String email, String password) {
+	public static ClientInfo create(long id, String fullname, String email, String password) {
 		return new ClientInfo(id, fullname, email, password);
 	}
 	
@@ -52,6 +56,10 @@ public class ClientInfo implements Serializable {
 	private boolean loggedIn;
 	
 	public ClientInfo() {}
+	
+	public ClientInfo(String fullname) {
+		this.fullname = fullname;
+	}
 	
 	private ClientInfo(String fullname, String email, String password) {
 		this.fullname = fullname;

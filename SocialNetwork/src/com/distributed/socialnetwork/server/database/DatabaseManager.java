@@ -7,15 +7,20 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.DatatypeConverter;
 
-
+import com.distributed.socialnetwork.server.posts.PostObject;
 import com.distributed.socialnetwork.shared.ClientInfo;
 
 /**
- * 
+ * This class handles all connections to and from the Database.
+ * All connections are handled here so that no security risks can arise.
  * @author Chris
- *
+ * Private classes are used so that we can keep track of column IDS for the database, so the correct information
+ * is pulled.
  */
 public class DatabaseManager {
 
@@ -38,11 +43,11 @@ public class DatabaseManager {
 	/** Database Column Variables -- Post Table **/
 	@SuppressWarnings("unused")
 	private static class Post {
-		public static int ID = 1;
-		public static int USERID = 2;
-		public static int DATETIME = 3;
-		public static int IMAGES = 4;
-		public static int POSTS = 5;
+		public static int ID = 1; // ID of the post
+		public static int USERID = 2; // The users ID that created the post
+		public static int DATETIME = 3; // The date and time of creation
+		public static int IMAGES = 4; // ID's of all images used on the post, Null if non are used.
+		public static int POSTS = 5; // URL Links and Text posts
 	}
 
 	/**
@@ -63,6 +68,13 @@ public class DatabaseManager {
 		return null;
 	}
 	
+	/**
+	 * This simply takes the passed in username and password from the login form. If the email is not valid then it will not continue,
+	 * otherwise it will cross-reference the email with the password.
+	 * @param email - Email passed in from the login box. Always in lowercase.
+	 * @param password - Password passed in from the login box, gets encrypted when checking if database value.
+	 * @return - Will return the client and all information if a user is found.
+	 */
 	public static ClientInfo get(String email, String password) {
 		Connection conn = getConnection();
 		if (!check(conn, email)) return null;
@@ -81,7 +93,7 @@ public class DatabaseManager {
 				if (databasePassword.equals(encoded)) {
 					String userId = rs.getString(User.USERID);
 					String fullname = rs.getString(User.FULLNAME);
-					client = ClientInfo.createClient(
+					client = ClientInfo.create(
 							Long.parseLong(userId), 
 							fullname, 
 							email,
@@ -92,6 +104,25 @@ public class DatabaseManager {
 			return client;
 		}
 		catch (SQLException | UnsupportedEncodingException e) {
+		}
+		return null;
+	}
+	
+	public static List<ClientInfo> get(String keyword) {
+		Connection conn = getConnection();
+		try {
+			Statement stmt = conn.createStatement();
+			String sql = "SELECT * FROM Users where fullname='" + keyword + "'";
+			ResultSet rs = stmt.executeQuery(sql);
+			List<ClientInfo> clients = new ArrayList<ClientInfo>();
+			
+			while (rs.next()) {
+				clients.add(ClientInfo.create(rs.getString(User.FULLNAME)));
+			}
+			conn.close();
+			return clients;
+		}
+		catch (SQLException e) {
 		}
 		return null;
 	}
@@ -114,6 +145,12 @@ public class DatabaseManager {
 			return true;
 		} catch (SQLException | UnsupportedEncodingException e) {
 		}
+		
+		return false;
+	}
+	
+	public static boolean put(PostObject post) {
+		Connection conn = getConnection();
 		
 		return false;
 	}

@@ -1,5 +1,8 @@
 package com.distributed.socialnetwork.client;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.distributed.socialnetwork.client.gallery.GalleryView;
 import com.distributed.socialnetwork.client.gallery.UploadContent;
 import com.distributed.socialnetwork.client.loginView.LoginView;
@@ -15,19 +18,32 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.logging.client.HasWidgetsLogHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
+import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class SocialNetwork implements EntryPoint {
+	
+	/**
+	 * Lets create a global logger, used to keep track of all the users posting new information.
+	 * (USED FOR ADMIN PURPOSES)
+	 */
+	public static Logger rootLogger = Logger.getLogger("");
+	
 	/**
 	 * The message displayed to the user when the server cannot be reached or
 	 * returns an error.
@@ -57,45 +73,31 @@ public class SocialNetwork implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-		/** This code will be implemented to our login button.
-		 connectionService.login(userBox.getValue(), passBox.getValue(), new AsyncCallback<ClientInfo>() {
+		final FormPanel form = new FormPanel();
+		form.setAction("/upload");
+		
+		form.setEncoding(FormPanel.ENCODING_MULTIPART);
+		form.setMethod(FormPanel.METHOD_POST);
+		
+		VerticalPanel panel = new VerticalPanel();
+		form.setWidget(panel);
+		FileUpload upload = new FileUpload();
+		upload.setName("file");
+		panel.add(upload);
+		
+		panel.add(new Button("Submit", new ClickHandler() {
+			public void onClick(ClickEvent event)  {
+				form.submit();
+			}
+		}));
+		
+		form.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
 			
-		  		@Override
-		  		public void onSuccess(ClientInfo result) {
-		  			if (result.getLoggedIn()) {
-		  				RootPanel.get().clear();
-		  				// Load the next page
-		  				
-		  				// Set the session expiry date (default 1 day).
-		  				String sessionID = result.getSessionID();
-		  				final long duration = 1000 * 60 * 60 * 24 * 1;
-		  				Date expires = new Date(Systeem.currentTimeMillis() + duration);
-		  				Cookesi.setCookie("sid", sessionID, expires, null "/", false);
-		  			} else {
-		  				// Display error
-		  			}
-		  		}
-		  		
-		  		@Override
-		  		public void onFailture(Throwable caught) {
-		  			// Error message.
-		  		}
-		  )};
-		 **/
+			@Override
+			public void onSubmitComplete(SubmitCompleteEvent event) {
+			}
+		});
+		RootPanel.get().add(form);
 		
-		/*
-		header.clear();
-		header.add(loginView.getLoginHeader().getHpanel());
-		content.clear();
-		content.add(loginView.getMainPanel());
-		footer.clear();
-		footer.add(loginView.getLoginFooter().getHpanel());
-		prepareLoginButton(loginView.getLoginButton(), loginView.getUsernameBox(), loginView.getPasswordBox());
-		
-		
-		galleryView = new GalleryView(userService, this);
-		galleryView.getGalleryTable().insertRow(0);
-		galleryView.getGalleryTable().setWidget(0, 0, content);
-		RootLayoutPanel.get().add(galleryView);**/
 	}
 }

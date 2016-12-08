@@ -18,6 +18,10 @@
   		<servlet-name>userContentImpl</servlet-name>
   		<servlet-class>com.distributed.socialnetwork.server.UserContentServiceImpl</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>upload</servlet-name>
+  	<servlet-class>com.distributed.socialnetwork.server.UploadContentServlet</servlet-class>
+  </servlet>
   
   <servlet-mapping>
     <servlet-name>connectionServiceImpl</servlet-name>
@@ -30,6 +34,10 @@
   <servlet-mapping>
   	<servlet-name>userContentImpl</servlet-name>
   	<url-pattern>/socialnetwork/images</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>upload</servlet-name>
+  	<url-pattern>/upload</url-pattern>
   </servlet-mapping>
   
   <!-- Default page to serve -->

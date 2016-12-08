@@ -1,5 +1,8 @@
 package com.distributed.socialnetwork.server;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -13,6 +16,8 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
  */
 @SuppressWarnings("serial")
 public class ConnectionServiceImpl extends RemoteServiceServlet implements ConnectionService {
+	
+	private static final String attribute = "user";
 	
 	private int noClients = 0;
 	
@@ -49,7 +54,7 @@ public class ConnectionServiceImpl extends RemoteServiceServlet implements Conne
 		String[] info = loginInfo.split(":");
 		if (loginInfo.length() <= 1) return null;
 		else {
-			ClientInfo client = ClientInfo.createClient(info[0], info[1], info[2]);
+			ClientInfo client = ClientInfo.create(info[0], info[1], info[2]);
 			if (DatabaseManager.put(client)) {
 				client.setSessionID(this.getThreadLocalRequest().getSession().getId());
 				client.setLoggedIn(true);
@@ -64,21 +69,26 @@ public class ConnectionServiceImpl extends RemoteServiceServlet implements Conne
 		ClientInfo user = null;
 		HttpServletRequest httpServletRequest = this.getThreadLocalRequest();
 		HttpSession session = httpServletRequest.getSession();
-		Object userObj = session.getAttribute("user");
+		Object userObj = session.getAttribute(attribute);
 		if (userObj != null && userObj instanceof ClientInfo)
 			user = (ClientInfo) userObj;
+		noClients++;
 		return user;
 	}
 	
-	private void storeUserInSession(ClientInfo client) {
+	private void storeUserInSession(final ClientInfo client) {
 		HttpServletRequest httpServletRequest = this.getThreadLocalRequest();
 		HttpSession session = httpServletRequest.getSession(true);
-		session.setAttribute("user", client);
+		session.setAttribute(attribute, client);
 	}
 	
 	private void deleteUserFromSession() {
 		HttpServletRequest httpServletRequsest = this.getThreadLocalRequest();
 		HttpSession session = httpServletRequsest.getSession();
-		session.removeAttribute("user");
+		session.removeAttribute(attribute);
+	}
+	
+	public int getNumberOfClients() {
+		return noClients;
 	}
 }

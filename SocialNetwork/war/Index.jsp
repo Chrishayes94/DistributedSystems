@@ -7,10 +7,10 @@
 	</head>
 
 	<body>
-		<div id="header"></div>
-		
-		<div id="content"></div>
-		
-		<div id="footer"></div>
+		<iframe src="javascript:''"
+		   id="__gwt_historyFrame"
+		   style="width:0;height:0;border:0"></iframe>
+		<h1> Logging Demonstration</h1>
+		<div id="gwtContainer"></div>
 	</body>
 </html>
