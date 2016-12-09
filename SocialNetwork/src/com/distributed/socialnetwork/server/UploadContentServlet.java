@@ -5,6 +5,7 @@ import static java.lang.Math.toIntExact;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import com.distributed.socialnetwork.server.database.DatabaseManager;
 import com.distributed.socialnetwork.shared.ClientInfo;
+import com.distributed.socialnetwork.shared.ImageObject;
 import com.google.gwt.user.client.Window;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
@@ -51,7 +53,7 @@ public class UploadContentServlet extends HttpServlet {
 	private int maxFileSize = 1024 * 1024 * 25; // 25 MB
 	private int maxMemSize = 4 * 1024;
 	
-	public static boolean upload(File f) {
+	public static boolean upload(File f, long id) {
 		try {
 			JSch jsch = new JSch();
 			final Session session = jsch.getSession(USER, URL_PATH, SSH_PORT);
@@ -64,6 +66,9 @@ public class UploadContentServlet extends HttpServlet {
 			sftpChannel.cd(REMOTE_DIRECTORY);
 			
 			sftpChannel.put(new FileInputStream(f), f.getName());
+			DatabaseManager.put(ImageObject.create(id, 
+					Utils.TIME_FORMAT.format(new Date()),
+					Utils.DATE_FORMAT.format(new Date())));
 			return true;
 		}
 		catch (Exception ex) {
@@ -108,7 +113,7 @@ public class UploadContentServlet extends HttpServlet {
 					String name = String.valueOf(generate());
 					File f = File.createTempFile(String.valueOf(ClientInfo.encode(name)), getType(fi.getName()));
 					fi.write(f);
-					upload(f);
+					upload(f, Long.parseLong(name));
 					/**while (DatabaseManager.check(generate())) {
 						name = String.valueOf(generate());
 					}

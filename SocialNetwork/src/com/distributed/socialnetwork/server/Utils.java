@@ -9,8 +9,8 @@ import javax.xml.bind.DatatypeConverter;
 
 public class Utils {
 
-	public static final DateFormat DATE_FORMAT  = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-	public static final DateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm:ss");
+	public static final DateFormat DATE_FORMAT  = new SimpleDateFormat("yyyy/MM/dd");
+	public static final DateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm");
 	
 	public static String encode(String password) {
 		try {

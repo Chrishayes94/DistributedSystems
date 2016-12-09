@@ -2,16 +2,18 @@ package com.distributed.socialnetwork.shared;
 
 public class ImageObject {
 
-	public static ImageObject create(long id, String date) {
-		return new ImageObject(id, date);
+	public static ImageObject create(long id, String time, String date) {
+		return new ImageObject(id, time, date);
 	}
 	
 	private long id;
-	private String creation;
+	private String creationTime;
+	private String creationDate;
 	
-	private ImageObject(long id, String creation) {
+	private ImageObject(long id, String time, String date) {
 		this.id = id;
-		this.creation = creation;
+		this.creationTime = time;
+		this.creationDate = date;
 	}
 	
 	public long getID() {
@@ -19,6 +21,10 @@ public class ImageObject {
 	}
 	
 	public String getCreationDate() {
-		return creation;
+		return creationDate;
+	}
+	
+	public String getCreationTime() {
+		return creationTime;
 	}
 }

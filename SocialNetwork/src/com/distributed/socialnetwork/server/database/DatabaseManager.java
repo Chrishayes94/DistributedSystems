@@ -26,7 +26,7 @@ public class DatabaseManager {
 
 	private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 	
-	protected static final String DB_URL = "jdbc:mysql://82.7.208.210:3306/socialnetwork";
+	protected static final String DB_URL = "jdbc:mysql://192.168.0.10:3306/socialnetwork";
 	protected static final String username = "server";
 	protected static final String password = "S.erver123";
 	
@@ -50,10 +50,9 @@ public class DatabaseManager {
 		public static int POSTS = 5; // URL Links and Text posts
 	}
 
-	@SuppressWarnings("unused")
 	private static class Images {
-		public static int ID = 1;
-		public static int IMAGEID = 2;
+		public static int IMAGEID = 1;
+		public static int CREATIONTIME = 2;
 		public static int CREATIONDATE = 3;
 	}
 	/**
@@ -196,16 +195,18 @@ public class DatabaseManager {
 		Connection conn = getConnection();
 		
 		try {
-			String sql = "INSERT INTO Images (imageid, datetime) VALUES (? , ?)";
+			String sql = "INSERT INTO Images (imageid, creationtime, creationdate) VALUES (?, ?, ?)";
 			PreparedStatement prep = conn.prepareStatement(sql);
 			
 			prep.setLong(Images.IMAGEID, image.getID());
+			prep.setString(Images.CREATIONTIME, image.getCreationTime().toString());
 			prep.setString(Images.CREATIONDATE, image.getCreationDate().toString());
 			prep.execute();
 			
 			conn.close();
 			return true;
 		} catch (SQLException e){
+			System.out.println(e.getMessage());
 		}
 		return false;
 	}
