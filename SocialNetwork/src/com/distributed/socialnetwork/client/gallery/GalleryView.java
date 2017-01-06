@@ -71,9 +71,8 @@ public class GalleryView extends Composite implements GalleryUpdatedEventHandler
 						
 						for (final ClientInfo content : contents) {
 
-							//Image imageWidget = createContentWidget(content);
-
-							//galleryTable.setWidget(currentRow, currentColumn, imageWidget);
+							Image imageWidget = createContentWidget(content);
+							galleryTable.setWidget(currentRow, currentColumn, imageWidget);
 
 							currentColumn++;
 							if (currentColumn >= GALLERY_WIDTH) {
@@ -81,7 +80,6 @@ public class GalleryView extends Composite implements GalleryUpdatedEventHandler
 								currentRow++;
 							}
 						}
-
 					}
 
 					@Override
@@ -92,7 +90,7 @@ public class GalleryView extends Composite implements GalleryUpdatedEventHandler
 				});
 	}
 
-	private Image createContentWidget(final PostObject image) {
+	private Image createContentWidget(final ClientInfo image) {
 		final Image imageWidget = new Image();
 		//imageWidget.setUrl(PostObject.getServingUrl() + "=s200");
 		final DecoratedPopupPanel simplePopup = new DecoratedPopupPanel(true);
@@ -106,7 +104,7 @@ public class GalleryView extends Composite implements GalleryUpdatedEventHandler
 				int top = source.getAbsoluteTop() + source.getOffsetHeight() + 10;
 
 				simplePopup.setWidth("150px");
-				simplePopup.setWidget(new HTML("Uploaded: "+ image.getCreationDate()));
+				simplePopup.setWidget(new HTML("Uploaded by: "+ image.getOwnerId()));
 				simplePopup.show();
 				simplePopup.setPopupPosition(left, top);
 			}

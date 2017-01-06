@@ -16,12 +16,39 @@ body {
 	margin: 0px 0px 0px;
 }
 
+.gwt-Splitlayoutpanel {
+	
+}
+
+.gwt-SuggestBox {
+	margin: 5px 5px 5px;
+	width: 1000px;
+	height: 25px;
+}
+
+.gwt-TextBox {
+	margin: 5px 5px 5px;
+	height: 25px;
+}
+
+.gwt-PasswordTextBox {
+	margin: 5px 5px 5px;
+	height: 25px;
+}
+
 .gwt-TextArea {
 	margin: 5px 5px 5px;
-	width: 600px;
-	height: 75px;
-	max-width: 600px;
-	max-height: 75px;
+	width: 1000px;
+	height: 25px;
+}
+
+.gwt-FileUpload {
+	margin: 5px 5px 5px;
+}
+
+.gwt-Button {
+  	margin: 5px 5px 5px;
+  	width: 75px;
 }
 
 .sendButton {

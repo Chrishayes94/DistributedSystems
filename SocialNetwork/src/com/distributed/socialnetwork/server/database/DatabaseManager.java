@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.xml.bind.DatatypeConverter;
@@ -128,6 +129,29 @@ public class DatabaseManager {
 			
 			while (rs.next()) {
 				clients.add(ClientInfo.create(rs.getString(User.FULLNAME)));
+			}
+			conn.close();
+			return clients;
+		}
+		catch (SQLException e) {
+		}
+		return null;
+	}
+	
+	/**
+	 * Get Method to return a list of fullnames for users.
+	 * @return - The return value containing a list of all fullname values for users.
+	 */
+	public static Collection<String> get() {
+		Connection conn = getConnection();
+		try {
+			Statement stmt = conn.createStatement();
+			String sql = "SELECT * fullname FROM Users";
+			ResultSet rs = stmt.executeQuery(sql);
+			Collection<String> clients = new ArrayList<String>();
+			
+			while (rs.next()) {
+				clients.add(rs.getString(User.FULLNAME));
 			}
 			conn.close();
 			return clients;
