@@ -1,10 +1,14 @@
 package com.distributed.socialnetwork.server;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.distributed.socialnetwork.client.services.ConnectionService;
@@ -22,6 +26,20 @@ public class ConnectionServiceImpl extends RemoteServiceServlet implements Conne
 	private static final String attribute = "user";
 	
 	private int noClients = 0;
+	
+	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		switch (req.getServletPath()) {
+			case "/login":
+				if (login(req.getParameter("email") + ":" + req.getParameter("pass")) != null) {
+					
+				} else {
+					// Unable to login, combination incorrect.
+				}
+		}
+	}
 	
 	@Override
 	public ClientInfo login(String loginInfo) {

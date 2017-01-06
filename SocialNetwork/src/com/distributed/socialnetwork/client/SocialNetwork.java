@@ -84,6 +84,9 @@ public class SocialNetwork implements EntryPoint {
 		final TextBox email = new TextBox();
 		final PasswordTextBox pass = new PasswordTextBox();
 		
+		email.setName("email");
+		pass.setName("pass");
+		
 		login.setAction("/login");
 		login.getElement().getStyle().setBackgroundColor("#BCC6C6");
 		
@@ -93,7 +96,6 @@ public class SocialNetwork implements EntryPoint {
 		loginPanel.add(pass);
 		loginPanel.add(new Button("Login", new ClickHandler() {
 			public void onClick(ClickEvent event)  {
-				//get values from email and pass boxes and check against db
 				login.submit();
 			}
 		}));
