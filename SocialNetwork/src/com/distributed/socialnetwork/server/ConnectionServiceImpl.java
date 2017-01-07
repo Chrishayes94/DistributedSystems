@@ -27,23 +27,14 @@ public class ConnectionServiceImpl extends RemoteServiceServlet implements Conne
 	
 	private int noClients = 0;
 	
-	
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
-		switch (req.getServletPath()) {
-			case "/login":
-				if (login(req.getParameter("email") + ":" + req.getParameter("pass")) != null) {
-					
-				} else {
-					// Unable to login, combination incorrect.
-				}
-		}
-	}
+	private boolean testing = true;
 	
 	@Override
 	public ClientInfo login(String loginInfo) {
 		String[] info = loginInfo.split(":");
+		if (testing) {
+			return ClientInfo.create("TestUser", info[0], info[1]);
+		}
 		if (loginInfo.length() <= 1) return null;
 		else {
 			ClientInfo client = DatabaseManager.get(info[0], info[1]);

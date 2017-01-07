@@ -11,6 +11,7 @@ import com.distributed.socialnetwork.client.services.UserContentServiceAsync;
 import com.distributed.socialnetwork.client.services.WebUIService;
 import com.distributed.socialnetwork.client.services.WebUIServiceAsync;
 import com.distributed.socialnetwork.server.database.DatabaseManager;
+import com.distributed.socialnetwork.shared.ClientInfo;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
@@ -18,6 +19,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;
@@ -72,6 +74,8 @@ public class SocialNetwork implements EntryPoint {
 	
 	public void loadApplication() {
 		
+		RootPanel.get().remove(0);
+		
 		RootPanel.get().add(createSearchForm());
 		RootPanel.get().add(createGalleryForm());
 		RootPanel.get().add(createPostForm());
@@ -87,7 +91,6 @@ public class SocialNetwork implements EntryPoint {
 		email.setName("email");
 		pass.setName("pass");
 		
-		login.setAction("/login");
 		login.getElement().getStyle().setBackgroundColor("#BCC6C6");
 		
 		login.setWidget(loginPanel);
@@ -96,7 +99,20 @@ public class SocialNetwork implements EntryPoint {
 		loginPanel.add(pass);
 		loginPanel.add(new Button("Login", new ClickHandler() {
 			public void onClick(ClickEvent event)  {
-				login.submit();
+				connectionService.login(email.getText() + ":" + pass.getText(), new AsyncCallback<ClientInfo>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						// Unable to login
+					}
+
+					@Override
+					public void onSuccess(ClientInfo result) {
+						// successful, load application.
+						loadApplication();
+					}
+					
+				});
 			}
 		}));
 		
@@ -114,15 +130,11 @@ public class SocialNetwork implements EntryPoint {
 		//oracle.addAll(DatabaseManager.get());
 		SuggestBox suggestBox = new SuggestBox(oracle);
 		
-		form1.setAction("/search");
 		form1.getElement().getStyle().setBackgroundColor("#BCC6C6");
 		
 		suggestBox.addSelectionHandler(new SelectionHandler<Suggestion>() {
 		    @Override public void onSelection(SelectionEvent<Suggestion> event) {
 		    	String selectedUser =   ((SuggestBox)event.getSource()).getValue();
-		    	//Load user posts based on fullname selected in suggestbox
-		    	
-		    	
 		    }
 		  });
 		
