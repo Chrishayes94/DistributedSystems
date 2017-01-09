@@ -138,6 +138,20 @@ public class DatabaseManager {
 		return null;
 	}
 	
+	public static String get(int id) {
+		Connection conn = getConnection();
+		try {
+			Statement stmt = conn.createStatement();
+			String sql = "SELECT * FROM USERS where userid='" + id + "'";
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			while (rs.next())
+				return rs.getString(User.FULLNAME);
+		}
+		catch (SQLException e){}
+		return "";
+	}
+	
 	/**
 	 * Get Method to return a list of fullnames for users.
 	 * @return - The return value containing a list of all fullname values for users.
@@ -157,6 +171,39 @@ public class DatabaseManager {
 			return clients;
 		}
 		catch (SQLException e) {
+		}
+		return null;
+	}
+	
+	public static Collection<?> posts(int max) {
+		return posts(0, max);
+	}
+	
+	/**
+	 * 
+	 * @param offset - 
+	 * @param max - 
+	 * @return
+	 */
+	public static Collection<?> posts(int offset, int max) {
+		Connection conn = getConnection();
+		Collection<PostObject> posts = new ArrayList<>();
+		int currentIndex = 0;
+		try {
+			Statement stmt = conn.createStatement();
+			String sql = "Select * FROM Posts";
+			ResultSet rs = stmt.executeQuery(sql);
+			rs.last();
+			while (offset-- > 0) rs.previous();
+			while (currentIndex < max) {
+				posts.add(PostObject.create(
+						rs.getInt(Post.USERID),
+						rs.getString(Post.DATETIME),
+						rs.getString(Post.IMAGES),
+						rs.getString(Post.POSTS)));
+			}
+			conn.close();
+		} catch (SQLException e) {
 		}
 		return null;
 	}

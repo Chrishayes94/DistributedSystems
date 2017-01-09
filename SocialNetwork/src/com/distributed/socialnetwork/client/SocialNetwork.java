@@ -1,5 +1,6 @@
 package com.distributed.socialnetwork.client;
 
+import java.util.Collection;
 import java.util.logging.Logger;
 
 import com.distributed.socialnetwork.client.gallery.GalleryView;
@@ -12,6 +13,7 @@ import com.distributed.socialnetwork.client.services.WebUIService;
 import com.distributed.socialnetwork.client.services.WebUIServiceAsync;
 import com.distributed.socialnetwork.server.database.DatabaseManager;
 import com.distributed.socialnetwork.shared.ClientInfo;
+import com.distributed.socialnetwork.shared.PostObject;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
@@ -41,6 +43,12 @@ import com.google.gwt.user.client.ui.PasswordTextBox;
 public class SocialNetwork implements EntryPoint {
 	
 	/**
+	 * This variables stores the max amount of posts to retrieve at each time, this can be 
+	 * increased or decreased via an admin depending on server loads.
+	 */
+	private static int POSTS_INTERVAL = 25;
+	
+	/**
 	 * Lets create a global logger, used to keep track of all the users posting new information.
 	 * (USED FOR ADMIN PURPOSES)
 	 */
@@ -64,6 +72,7 @@ public class SocialNetwork implements EntryPoint {
 	private UploadContent uploadWidget = new UploadContent(userService);
 	
 	final SplitLayoutPanel panel1 = new SplitLayoutPanel();
+	
 	/**
 	 * This is the entry point method.
 	 */
@@ -79,6 +88,7 @@ public class SocialNetwork implements EntryPoint {
 		RootPanel.get().add(createSearchForm());
 		RootPanel.get().add(createGalleryForm());
 		RootPanel.get().add(createPostForm());
+
 	}
 	
 	private FormPanel createLoginForm() {
