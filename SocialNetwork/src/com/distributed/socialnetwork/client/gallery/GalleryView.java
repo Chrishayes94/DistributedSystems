@@ -1,6 +1,6 @@
 package com.distributed.socialnetwork.client.gallery;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.logging.Level;
 
 import com.distributed.socialnetwork.client.SocialNetwork;
@@ -30,23 +30,12 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import static com.distributed.socialnetwork.server.UploadContentServlet.download;
-
 /**
  * Creating docklayoutpanel layout for main gallery view page after login
  * @author Alex
  */
 
 public class GalleryView extends Composite implements GalleryUpdatedEventHandler {
-	
-	private static Image get(String name) {
-		
-		if (name == null) return null;
-		
-		if (name == "") return null;
-		
-		return download(name);
-	}
 	
 	@UiTemplate("GalleryView.ui.xml")
 	interface GalleryViewUiBinder extends UiBinder<Widget, GalleryView> {}
@@ -77,15 +66,13 @@ public class GalleryView extends Composite implements GalleryUpdatedEventHandler
 	public GalleryView(SocialNetwork main) {
 		this.parent = main;
 		initWidget(uiBinder.createAndBindUi(this));
-		
-		refreshGallery();
 	}
 
 	public void refreshGallery() {
-		userContentService.getRecentlyUploaded(posts, new AsyncCallback<Collection<PostObject>>() {
+		userContentService.getRecentlyUploaded(posts, new AsyncCallback<List<PostObject>>() {
 
 					@Override
-					public void onSuccess(Collection<PostObject> contents) {
+					public void onSuccess(List<PostObject> contents) {
 						
 						for (final PostObject content : contents) {
 							posts++;
@@ -108,7 +95,6 @@ public class GalleryView extends Composite implements GalleryUpdatedEventHandler
 					}
 				});
 	}
-
 	private Object createContentWidget(final PostObject image) {
 		Image imageWidget = new Image();
 		boolean isImage = false;
@@ -124,13 +110,23 @@ public class GalleryView extends Composite implements GalleryUpdatedEventHandler
 				@Override
 				public void onMouseOver(MouseOverEvent event) {
 					Widget source = (Widget) event.getSource();
-					int left = source.getAbsoluteLeft() + 10;
-					int top = source.getAbsoluteTop() + source.getOffsetHeight() + 10;
-	
-					simplePopup.setWidth("150px");
-					simplePopup.setWidget(new HTML("Uploaded by: " + DatabaseManager.get(image.getID())));
-					simplePopup.show();
-					simplePopup.setPopupPosition(left, top);
+					final int left = source.getAbsoluteLeft() + 10;
+					final int top = source.getAbsoluteTop() + source.getOffsetHeight() + 10;
+					
+					userContentService.findName(image.getID(), new AsyncCallback<String>() {
+
+						@Override
+						public void onFailure(Throwable caught) {
+						}
+
+						@Override
+						public void onSuccess(String result) {
+							simplePopup.setWidth("150px");
+							simplePopup.setWidget(new HTML("Uploaded by: " + result));
+							simplePopup.show();
+							simplePopup.setPopupPosition(left, top);
+						}
+					});
 				}
 			});
 	
@@ -160,6 +156,27 @@ public class GalleryView extends Composite implements GalleryUpdatedEventHandler
 		return imageWidget;
 	}
 
+	private Image get(String name) {
+		final Image image = new Image();
+		
+		if (name.equals("") || name == null) return null;
+		
+		userContentService.getImage(name, new AsyncCallback<String>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				image.setUrl("");
+			}
+
+			@Override
+			public void onSuccess(String result) {
+				image.setUrl(result);
+			}
+			
+		});
+		return image;
+	}
+	
 	public void onGalleryUpdated(GalleryUpdatedEvent event) {
 		refreshGallery();
 	}

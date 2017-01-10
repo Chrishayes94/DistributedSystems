@@ -175,7 +175,7 @@ public class DatabaseManager {
 		return null;
 	}
 	
-	public static Collection<?> posts(int max) {
+	public static List<?> posts(int max) {
 		return posts(0, max);
 	}
 	
@@ -185,9 +185,9 @@ public class DatabaseManager {
 	 * @param max - 
 	 * @return
 	 */
-	public static Collection<?> posts(int offset, int max) {
+	public static List<?> posts(int offset, int max) {
 		Connection conn = getConnection();
-		Collection<PostObject> posts = new ArrayList<>();
+		List<PostObject> posts = new ArrayList<>();
 		int currentIndex = 0;
 		try {
 			Statement stmt = conn.createStatement();

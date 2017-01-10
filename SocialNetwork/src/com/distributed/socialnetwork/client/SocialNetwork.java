@@ -1,6 +1,5 @@
 package com.distributed.socialnetwork.client;
 
-import java.util.Collection;
 import java.util.logging.Logger;
 
 import com.distributed.socialnetwork.client.gallery.GalleryView;
@@ -65,8 +64,8 @@ public class SocialNetwork implements EntryPoint {
 	 * Create all the Services for async calls to the server.
 	 */
 	private final ConnectionServiceAsync connectionService = GWT.create(ConnectionService.class);
-	private final WebUIServiceAsync webUIService = (WebUIServiceAsync) GWT.create(WebUIService.class);
-	private final UserContentServiceAsync userService = (UserContentServiceAsync) GWT.create(UserContentService.class);
+	private final WebUIServiceAsync webUIService = GWT.create(WebUIService.class);
+	private final UserContentServiceAsync userService = GWT.create(UserContentService.class);
 	
 	private GalleryView galleryView = new GalleryView(this);
 	private UploadContent uploadWidget = new UploadContent(userService);

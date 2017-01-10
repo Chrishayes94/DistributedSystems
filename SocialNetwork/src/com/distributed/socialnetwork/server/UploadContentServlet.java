@@ -88,8 +88,8 @@ public class UploadContentServlet extends HttpServlet {
 		return false;
 	}
 	
-	public static Image download(String name) {
-		Image image = new Image();
+	public static String download(String name) {
+		String result = "";
 		try {
 			final Session session = getSession();
 			session.connect();
@@ -99,16 +99,13 @@ public class UploadContentServlet extends HttpServlet {
 			channel.cd(REMOTE_DIRECTORY);
 			
 			byte[] bytes = new byte[channel.get(name).available()];
-			
-			String b = bytes.toString();
-			image.setUrl("data:image/png;base64" + Base64Utils.toBase64(bytes));
-			channel.disconnect();
-			session.disconnect();
+
+			result = Base64Utils.toBase64(bytes);
 		}
 		catch (Exception ex) {
 			System.out.println(ex.getMessage());
 		}
-		return image;
+		return "data:image/png;base64," + result;
 	}
 	
 	@Override

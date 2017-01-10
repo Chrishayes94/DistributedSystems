@@ -13,6 +13,7 @@ import com.distributed.socialnetwork.client.services.UserContentService;
 import com.distributed.socialnetwork.server.database.DatabaseManager;
 import com.distributed.socialnetwork.shared.ClientInfo;
 import com.distributed.socialnetwork.shared.PostObject;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 @SuppressWarnings("serial")
@@ -30,6 +31,11 @@ public class UserContentServiceImpl extends RemoteServiceServlet implements User
 			}
 		}
 		return "";
+	}
+	
+	@Override
+	public String findName(int id) {
+		return DatabaseManager.get(id);
 	}
 	
 	@Override
@@ -71,19 +77,24 @@ public class UserContentServiceImpl extends RemoteServiceServlet implements User
 	}
 	
 	@Override
-	public Collection<PostObject> getRecentlyUploaded(int offset) {
+	public List<PostObject> getRecentlyUploaded(int offset) {
 		// Get a max of 25 at a time of posts.
 		// Load posts for the user to populate the screen
 		// The max we will want at a time will be 25,as this is a assignment we will also display
 		// No more content to display.
 		// Get the first 25 posts.
-		return (Collection<PostObject>) DatabaseManager.posts(offset, POSTS_INTERVAL); // This will start at the last row in the table.
+		return (List<PostObject>) DatabaseManager.posts(offset, POSTS_INTERVAL); // This will start at the last row in the table.
 	}
 
 	@Override
 	public List<ClientInfo> search(String keyword) {
 		if (keyword.isEmpty() || keyword == null) return null;
 		return DatabaseManager.get(keyword);
+	}
+	
+	@Override
+	public String getImage(String name) {
+		return UploadContentServlet.download(name);
 	}
 	
 	@Override
