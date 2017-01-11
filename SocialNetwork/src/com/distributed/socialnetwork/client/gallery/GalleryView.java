@@ -5,6 +5,7 @@ import java.util.logging.Level;
 
 import com.distributed.socialnetwork.client.SocialNetwork;
 import com.distributed.socialnetwork.client.services.UserContentServiceAsync;
+import com.distributed.socialnetwork.client.ui.PostView;
 import com.distributed.socialnetwork.server.UploadContentServlet;
 import com.distributed.socialnetwork.server.database.DatabaseManager;
 import com.distributed.socialnetwork.shared.ClientInfo;
@@ -66,6 +67,18 @@ public class GalleryView extends Composite implements GalleryUpdatedEventHandler
 	public GalleryView(SocialNetwork main) {
 		this.parent = main;
 		initWidget(uiBinder.createAndBindUi(this));
+		
+		galleryTable.setCellSpacing(20);
+	}
+	
+	public void createTest() {		
+		PostView post = new PostView("Test status box");
+		galleryTable.setWidget(currentRow, currentColumn++, post.getPanel());
+		
+		if (currentColumn >= GALLERY_WIDTH) {
+			currentColumn = 0;
+			currentRow++;
+		}
 	}
 
 	public void refreshGallery() {

@@ -10,6 +10,7 @@ import com.distributed.socialnetwork.client.services.UserContentService;
 import com.distributed.socialnetwork.client.services.UserContentServiceAsync;
 import com.distributed.socialnetwork.client.services.WebUIService;
 import com.distributed.socialnetwork.client.services.WebUIServiceAsync;
+import com.distributed.socialnetwork.client.ui.HintTextBox;
 import com.distributed.socialnetwork.server.database.DatabaseManager;
 import com.distributed.socialnetwork.shared.ClientInfo;
 import com.distributed.socialnetwork.shared.PostObject;
@@ -23,6 +24,7 @@ import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FileUpload;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
@@ -94,8 +96,8 @@ public class SocialNetwork implements EntryPoint {
 		
 		final FormPanel login = new FormPanel();
 		final HorizontalPanel loginPanel = new HorizontalPanel();
-		final TextBox email = new TextBox();
-		final PasswordTextBox pass = new PasswordTextBox();
+		final HintTextBox email = new HintTextBox("", "Email", false);
+		final HintTextBox pass = new HintTextBox("", "Password", false);
 		
 		email.setName("email");
 		pass.setName("pass");
@@ -187,11 +189,15 @@ public class SocialNetwork implements EntryPoint {
 		return form2;
 	}
 	
-	private SplitLayoutPanel createGalleryForm() {
-		final SplitLayoutPanel panel1 = new SplitLayoutPanel();
-		panel1.addEast(galleryView.getGalleryTable(), 400);		
-		panel1.addWest(galleryView.getGalleryTable(), 400);
+	private FlexTable createGalleryForm() {
+		//final SplitLayoutPanel panel1 = new SplitLayoutPanel();
+		//panel1.addEast(galleryView.getGalleryTable(), 400);		
+		//panel1.addWest(galleryView.getGalleryTable(), 400);
 		
-		return panel1;
+		for (int i = 0; i < 25; i++) {
+		galleryView.createTest();
+		}
+		
+		return galleryView.getGalleryTable();
 	}
 }

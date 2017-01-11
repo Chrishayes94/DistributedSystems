@@ -73,3 +73,22 @@ body {
 #closeButton {
   margin: 15px 6px 6px;
 }
+
+.postBox {
+	max-width: 150px;
+	max-height: 150px;
+}
+
+/** Watermark for new text box */
+.textInput {
+	border: 1px solid #C9C7BA;
+	font-fanily: Tahoma, Verdana, Arial, Helvertica, sans-serif;
+	font-size: 14px;
+	padding-left: 2px;
+	padding-top: 2px;
+}
+
+.textInput-watermark {
+	font-style: italic;
+	color: DarkGray;
+}
