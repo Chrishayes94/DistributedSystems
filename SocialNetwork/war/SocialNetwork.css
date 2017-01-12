@@ -26,6 +26,36 @@ body {
 	height: 25px;
 }
 
+.gwt-SuggestBox-multivalue {
+	height: 42px;
+}
+
+.suggestPopupContent table {
+	width: 327px;
+}
+
+.gwt-SuggestBoxPopup {
+	margin-left: 0px;
+	margin-top: -7px;
+}
+
+.gwt-SuggestBoxPopup .item {
+	background: white;
+	color: black;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	padding: 0px 8px;
+	font-size: 12px;
+	line-height: 14px;
+}
+
+.gwt-SuggestBoxPopup .item-selected {
+	background-color: #7CA1C2;
+	color: white;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+}
+
 .gwt-TextBox {
 	margin: 5px 5px 5px;
 	height: 25px;
@@ -67,6 +97,19 @@ body {
 
 .serverResponseLabelError {
   color: red;
+}
+
+.flexTable {
+	
+}
+
+.flexTable td {
+	border: 1px solid #BBBBBB;
+	padding: 3px;
+}
+
+.flexTable-buttonPanel td {
+	border: 0px;
 }
 
 /** Set ids using widget.getElement().setId("idOfElement") */

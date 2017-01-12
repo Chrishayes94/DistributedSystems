@@ -3,6 +3,7 @@ package com.distributed.socialnetwork.server;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class UserContentServiceImpl extends RemoteServiceServlet implements User
 	}
 	
 	@Override
-	public String findName(int id) {
+	public String findName(long id) {
 		return DatabaseManager.get(id);
 	}
 	
@@ -66,9 +67,8 @@ public class UserContentServiceImpl extends RemoteServiceServlet implements User
 	}
 
 	@Override
-	public ClientInfo get(String key) {
-		// TODO Auto-generated method stub
-		return null;
+	public String get(long key) {
+		return DatabaseManager.get(key);
 	}
 
 	@Override
@@ -76,6 +76,7 @@ public class UserContentServiceImpl extends RemoteServiceServlet implements User
 		return false;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<PostObject> getRecentlyUploaded(int offset) {
 		// Get a max of 25 at a time of posts.
@@ -87,9 +88,20 @@ public class UserContentServiceImpl extends RemoteServiceServlet implements User
 	}
 
 	@Override
+	public List<PostObject> getUsersPosts(int id) {
+		
+		return (List<PostObject>) DatabaseManager.posts(id, 0, POSTS_INTERVAL);
+	}
+	
+	@Override
 	public List<ClientInfo> search(String keyword) {
 		if (keyword.isEmpty() || keyword == null) return null;
 		return DatabaseManager.get(keyword);
+	}
+	
+	@Override
+	public List<String> get() {
+		return DatabaseManager.get();
 	}
 	
 	@Override

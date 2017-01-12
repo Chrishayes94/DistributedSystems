@@ -12,6 +12,7 @@ import java.util.List;
 
 import javax.xml.bind.DatatypeConverter;
 
+import com.distributed.socialnetwork.server.Utils;
 import com.distributed.socialnetwork.shared.ClientInfo;
 import com.distributed.socialnetwork.shared.ImageObject;
 import com.distributed.socialnetwork.shared.PostObject;
@@ -27,7 +28,7 @@ public class DatabaseManager {
 
 	private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 	
-	protected static final String DB_URL = "jdbc:mysql://192.168.0.10:3306/socialnetwork";
+	protected static final String DB_URL = "jdbc:mysql://192.168.0.10:3306/socialnetwork?autoReconnect=true&useSSL=false";
 	protected static final String username = "server";
 	protected static final String password = "S.erver123";
 	
@@ -49,6 +50,7 @@ public class DatabaseManager {
 		public static int DATETIME = 3; // The date and time of creation
 		public static int IMAGES = 4; // ID's of all images used on the post, Null if non are used.
 		public static int POSTS = 5; // URL Links and Text posts
+		public static int LIKEIDS = 6; // IDS of all the users to like this post.
 	}
 
 	private static class Images {
@@ -94,6 +96,7 @@ public class DatabaseManager {
 			if (rs.first()) {
 				// First lets check the passwords
 				String databasePassword = rs.getString(User.PASSWORD);
+				password = Utils.encode(password);
 				
 				if (databasePassword.equals(password)) {
 					String userId = rs.getString(User.USERID);
@@ -138,17 +141,19 @@ public class DatabaseManager {
 		return null;
 	}
 	
-	public static String get(int id) {
+	public static String get(long id) {
 		Connection conn = getConnection();
 		try {
 			Statement stmt = conn.createStatement();
-			String sql = "SELECT * FROM USERS where userid='" + id + "'";
+			String sql = "SELECT * FROM Users where userid='" + id + "'";
 			ResultSet rs = stmt.executeQuery(sql);
 			
 			while (rs.next())
 				return rs.getString(User.FULLNAME);
 		}
-		catch (SQLException e){}
+		catch (SQLException e){
+			System.out.println(e.getMessage());
+		}
 		return "";
 	}
 	
@@ -156,13 +161,13 @@ public class DatabaseManager {
 	 * Get Method to return a list of fullnames for users.
 	 * @return - The return value containing a list of all fullname values for users.
 	 */
-	public static Collection<String> get() {
+	public static List<String> get() {
 		Connection conn = getConnection();
 		try {
 			Statement stmt = conn.createStatement();
-			String sql = "SELECT * fullname FROM Users";
+			String sql = "SELECT * From Users";
 			ResultSet rs = stmt.executeQuery(sql);
-			Collection<String> clients = new ArrayList<String>();
+			List<String> clients = new ArrayList<String>();
 			
 			while (rs.next()) {
 				clients.add(rs.getString(User.FULLNAME));
@@ -179,31 +184,48 @@ public class DatabaseManager {
 		return posts(0, max);
 	}
 	
-	/**
-	 * 
-	 * @param offset - 
-	 * @param max - 
-	 * @return
-	 */
 	public static List<?> posts(int offset, int max) {
+		return posts(0, 0, max);
+	}
+	
+	public static List<?> posts(int user, int offset, int max) {
 		Connection conn = getConnection();
 		List<PostObject> posts = new ArrayList<>();
+		
+		// Extra arguments
+		String argument = "";
+		if (user > 0) argument = " WHERE userid='" + String.valueOf(user) + "'";
+		
 		int currentIndex = 0;
 		try {
 			Statement stmt = conn.createStatement();
-			String sql = "Select * FROM Posts";
+			String sql = "Select * FROM Posts" + argument;
 			ResultSet rs = stmt.executeQuery(sql);
 			rs.last();
+			
+			// Temporary fix for skipping the latest post
+			posts.add(PostObject.create(
+					rs.getInt(Post.ID),
+					rs.getLong(Post.USERID),
+					rs.getString(Post.DATETIME),
+					rs.getString(Post.IMAGES),
+					rs.getString(Post.POSTS),
+					rs.getString(Post.LIKEIDS)));
+			
 			while (offset-- > 0) rs.previous();
-			while (currentIndex < max) {
+			while (rs.previous() && currentIndex++ < max) {
 				posts.add(PostObject.create(
-						rs.getInt(Post.USERID),
+						rs.getInt(Post.ID),
+						rs.getLong(Post.USERID),
 						rs.getString(Post.DATETIME),
 						rs.getString(Post.IMAGES),
-						rs.getString(Post.POSTS)));
+						rs.getString(Post.POSTS),
+						rs.getString(Post.LIKEIDS)));
 			}
 			conn.close();
+			return posts;
 		} catch (SQLException e) {
+			System.out.println(e.getMessage());
 		}
 		return null;
 	}
@@ -223,15 +245,16 @@ public class DatabaseManager {
 			String sql = "INSERT INTO Users (userid, email, password, fullname) VALUES (?, ?, ?, ?)";
 			PreparedStatement prep = conn.prepareStatement(sql);
 			
-			prep.setLong(User.USERID, client.getOwnerId());
-			prep.setString(User.EMAIL, client.getEmail());
-			prep.setString(User.PASSWORD, DatatypeConverter.printBase64Binary(client.getPassword()));
-			prep.setString(User.FULLNAME, client.getFullname());
+			prep.setLong(1, client.getOwnerId());
+			prep.setString(2, client.getEmail());
+			prep.setString(3, DatatypeConverter.printBase64Binary(client.getPassword()));
+			prep.setString(4, client.getFullname());
 			prep.execute();
 			
 			conn.close();
 			return true;
 		} catch (SQLException e) {
+			System.out.println(e.getMessage());
 		}
 		
 		return false;
@@ -246,18 +269,20 @@ public class DatabaseManager {
 		Connection conn = getConnection();
 		
 		try {
-			String sql = "INSERT INTO Posts (userid, datetime, images, posts) VALUES (?, ?, ?, ?)";
+			String sql = "INSERT INTO Posts (userid, datetime, images, posts, likeids) VALUES (?, ?, ?, ?, ?)";
 			PreparedStatement prep = conn.prepareStatement(sql);
 			
-			prep.setLong(Post.ID, post.getID());
-			prep.setString(Post.DATETIME, post.getCreationDate().toString());
-			prep.setString(Post.IMAGES, post.getImagesUnsplit());
-			prep.setString(Post.POSTS, post.getPosts());
+			prep.setLong(1, post.getID());
+			prep.setString(2, post.getCreationDate().toString());
+			prep.setString(3, post.getImagesUnsplit());
+			prep.setString(4, post.getPosts());
+			prep.setString(5, post.getIDS());
 			prep.execute();
 			
 			conn.close();
 			return true;
 		} catch (SQLException e) {
+			System.out.println(e.getMessage());
 		}
 		return false;
 	}
@@ -269,7 +294,7 @@ public class DatabaseManager {
 			String sql = "INSERT INTO Images (imageid, creationtime, creationdate) VALUES (?, ?, ?)";
 			PreparedStatement prep = conn.prepareStatement(sql);
 			
-			prep.setLong(Images.IMAGEID, image.getID());
+			prep.setString(Images.IMAGEID, image.getID());
 			prep.setString(Images.CREATIONTIME, image.getCreationTime().toString());
 			prep.setString(Images.CREATIONDATE, image.getCreationDate().toString());
 			prep.execute();

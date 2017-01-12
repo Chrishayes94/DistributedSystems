@@ -1,21 +1,12 @@
 package com.distributed.socialnetwork.server;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.distributed.socialnetwork.client.services.ConnectionService;
 import com.distributed.socialnetwork.server.database.DatabaseManager;
 import com.distributed.socialnetwork.shared.ClientInfo;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
 
 /**
  * The server-side implementation of the RPC service.
@@ -27,10 +18,14 @@ public class ConnectionServiceImpl extends RemoteServiceServlet implements Conne
 	
 	private int noClients = 0;
 	
-	private boolean testing = true;
+	private boolean testing = false;
 	
 	@Override
 	public ClientInfo login(String loginInfo) {
+		if (loginFromSessionServer() != null) {
+			return loginFromSessionServer();
+		}
+		
 		String[] info = loginInfo.split(":");
 		if (testing) {
 			return ClientInfo.create("TestUser", info[0], info[1]);

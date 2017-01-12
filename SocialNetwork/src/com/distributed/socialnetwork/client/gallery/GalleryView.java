@@ -5,10 +5,7 @@ import java.util.logging.Level;
 
 import com.distributed.socialnetwork.client.SocialNetwork;
 import com.distributed.socialnetwork.client.services.UserContentServiceAsync;
-import com.distributed.socialnetwork.client.ui.PostView;
-import com.distributed.socialnetwork.server.UploadContentServlet;
-import com.distributed.socialnetwork.server.database.DatabaseManager;
-import com.distributed.socialnetwork.shared.ClientInfo;
+import com.distributed.socialnetwork.client.ui.PostFeed;
 import com.distributed.socialnetwork.shared.PostObject;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -20,7 +17,6 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratedPopupPanel;
@@ -36,21 +32,20 @@ import com.google.gwt.user.client.ui.Widget;
  * @author Alex
  */
 
-public class GalleryView extends Composite implements GalleryUpdatedEventHandler {
+public class GalleryView extends Composite implements GalleryUpdatedEventHandler, PostFeedEvent {
 	
 	@UiTemplate("GalleryView.ui.xml")
 	interface GalleryViewUiBinder extends UiBinder<Widget, GalleryView> {}
 
 	private VerticalPanel vPanel = new VerticalPanel();
 	
-	private UploadContent uploadWidget;
 	private GalleryView galleryView;
 	
 	private GalleryViewUiBinder uiBinder = GWT.create(GalleryViewUiBinder.class);
 
 	private UserContentServiceAsync userContentService;
 	
-	private static final int GALLERY_WIDTH = 5;
+	private static final int GALLERY_WIDTH = 4;
 
 	private SocialNetwork parent;
 	
@@ -66,14 +61,16 @@ public class GalleryView extends Composite implements GalleryUpdatedEventHandler
 	
 	public GalleryView(SocialNetwork main) {
 		this.parent = main;
+		this.userContentService = main.getUserService();
 		initWidget(uiBinder.createAndBindUi(this));
 		
 		galleryTable.setCellSpacing(20);
 	}
 	
 	public void createTest() {		
-		PostView post = new PostView("Test status box");
-		galleryTable.setWidget(currentRow, currentColumn++, post.getPanel());
+		PostFeed post = new PostFeed();
+		galleryTable.setWidget(currentRow, currentColumn++, post);
+		galleryTable.setStylePrimaryName("flexTable");
 		
 		if (currentColumn >= GALLERY_WIDTH) {
 			currentColumn = 0;
@@ -81,18 +78,21 @@ public class GalleryView extends Composite implements GalleryUpdatedEventHandler
 		}
 	}
 
-	public void refreshGallery() {
-		userContentService.getRecentlyUploaded(posts, new AsyncCallback<List<PostObject>>() {
+	public void refreshGallery(int...is) {
+		currentRow = currentColumn = 0;
+		userContentService.getRecentlyUploaded(is == null || is.length == 0 ? posts : is[0], new AsyncCallback<List<PostObject>>() {
 
 					@Override
 					public void onSuccess(List<PostObject> contents) {
 						
+						if (contents.size() == 0 || contents == null)
+							return;
+						
 						for (final PostObject content : contents) {
 							posts++;
 							Object imageWidget = createContentWidget(content);
-							galleryTable.setWidget(currentRow, currentColumn, (Widget) imageWidget);
-
-							currentColumn++;
+							galleryTable.setWidget(currentRow, currentColumn++, (Widget) imageWidget);
+							
 							if (currentColumn >= GALLERY_WIDTH) {
 								currentColumn = 0;
 								currentRow++;
@@ -108,13 +108,47 @@ public class GalleryView extends Composite implements GalleryUpdatedEventHandler
 					}
 				});
 	}
+	
+	public void refreshGallery(int id) {
+		userContentService.getUsersPosts(id, new AsyncCallback<List<PostObject>>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				SocialNetwork.rootLogger.log(Level.WARNING, "Unable to recieve the requested users posts, error reprorted:\n" + 
+										caught.getMessage());
+			}
+
+			@Override
+			public void onSuccess(List<PostObject> result) {
+				if (result.size() == 0 || result == null)
+					return;
+				
+				galleryTable.clear();
+				posts = 0;
+				currentRow = currentColumn = 0;
+				
+				for (final PostObject content : result) {
+					posts++;
+					Object ImageWidget = createContentWidget(content);
+					galleryTable.setWidget(currentRow, currentColumn++, (Widget) ImageWidget);
+					
+					if (currentColumn >= GALLERY_WIDTH) {
+						currentColumn = 0;
+						currentRow++;
+					}
+				}
+			}
+			
+		});
+	}
+	
+	private String user;
 	private Object createContentWidget(final PostObject image) {
-		Image imageWidget = new Image();
-		boolean isImage = false;
-		
+		final Image imageWidget = new Image();
+		final PostFeed feed = new PostFeed(image, image.getID(), user, this);
+
 		// We know that the post is an image post.
-		if ((imageWidget = get(image.getImages()[0])) != null) {
-			isImage = true;
+		/**if (image.isImagePost()) {
 			
 			final DecoratedPopupPanel simplePopup = new DecoratedPopupPanel(true);
 	
@@ -164,9 +198,37 @@ public class GalleryView extends Composite implements GalleryUpdatedEventHandler
 			// We know that the post is only a text post.
 			// So populate the information.
 			String s = image.getPosts();
-		}
+		}**/
 
-		return imageWidget;
+		userContentService.findName(image.getID(), new AsyncCallback<String>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+			}
+
+			@Override
+			public void onSuccess(String result) {
+				feed.setUsername(result);
+			}
+			
+		});
+		
+		userContentService.getImage(image.getImagesUnsplit(), new AsyncCallback<String>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onSuccess(String result) {
+				feed.alterImage(result);
+			}
+			
+		});
+		
+		return feed;
 	}
 
 	private Image get(String name) {
@@ -190,8 +252,15 @@ public class GalleryView extends Composite implements GalleryUpdatedEventHandler
 		return image;
 	}
 	
+	@Override
 	public void onGalleryUpdated(GalleryUpdatedEvent event) {
 		refreshGallery();
+	}
+	
+
+	@Override
+	public void feedLiked(PostFeed feed, long userId, boolean liked) {
+		refreshGallery(posts > 25 ? posts - 25 : posts);
 	}
 
 	public FlexTable getGalleryTable() {

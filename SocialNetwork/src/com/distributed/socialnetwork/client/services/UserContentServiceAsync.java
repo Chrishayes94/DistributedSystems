@@ -15,17 +15,21 @@ import com.distributed.socialnetwork.shared.PostObject;
 
 public interface UserContentServiceAsync {
 	
-	void findName(int id, AsyncCallback<String> callback);
+	void findName(long id, AsyncCallback<String> callback);
 
 	void upload(AsyncCallback<Void> callback);
 	
 	void getImageUploadUrl(AsyncCallback<String> callback);
 
-	void get(String key, AsyncCallback<ClientInfo> callback);
+	void get(long key, AsyncCallback<String> callback);
 
 	void getRecentlyUploaded(int offset, AsyncCallback<List<PostObject>> callback);
+	
+	void getUsersPosts(int id, AsyncCallback<List<PostObject>> callback);
 
 	void search(String keyword, AsyncCallback<List<ClientInfo>> callback);
+	
+	void get(AsyncCallback<List<String>> callback);
 	
 	void post(PostObject obj,AsyncCallback<Boolean> callback);
 	
