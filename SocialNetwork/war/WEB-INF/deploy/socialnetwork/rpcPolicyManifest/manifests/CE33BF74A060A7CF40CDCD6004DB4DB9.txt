@@ -1,0 +1,2 @@
+serviceClass: com.distributed.socialnetwork.client.services.ConnectionService
+path: 435487FD4EFD24A60B6D229C7E98E1C5.gwt.rpc

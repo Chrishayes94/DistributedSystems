@@ -1,0 +1,2 @@
+serviceClass: com.distributed.socialnetwork.client.services.WebUIService
+path: 2F2FA84B9E0C8FA9F74636FA453F4F2F.gwt.rpc

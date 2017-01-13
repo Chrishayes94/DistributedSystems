@@ -1,0 +1,2 @@
+serviceClass: com.distributed.socialnetwork.client.services.UserContentService
+path: EB0407527F62C91B49E2BB1572F2097D.gwt.rpc
